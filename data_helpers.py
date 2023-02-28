@@ -6,6 +6,6 @@
 
 def get_filepaths(text_file):
     with open(text_file) as file:
-        lines = file.readlines()
+        lines = file.read().splitlines()
         
     return lines
