@@ -35,8 +35,8 @@ The final product includes several colorimetry metrics that aid the chemists in 
 
 Metric | Description
 --|--
-$\Delta E_{00}$ | Total color difference using the Delta E 2000 formula
-$\Delta L^*$ | Change in lightness
+$\Delta E_{00}$ | Total color difference using the Delta E2000 formula
+$\Delta L^*$ | Change in lightness, or ligher(+)/darker(-) than the comparison
 $\Delta a^*$ | Change on the red(+)/green(-) axis
 $\Delta b^*$ | Change on the yellow(+)/blue(-) axis
 $\Delta C^*$ | Change in the magnitude of chroma
