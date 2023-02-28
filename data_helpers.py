@@ -42,3 +42,18 @@ def get_data(file_paths):
     return all_data
 
 
+def get_missing_rows(df1, df2):
+    """Returns rows in df1 that are not present in df2.
+
+    Args:
+        df1 (pandas.Dataframe): Dataframe that has additional rows.
+        df2 (pandas.Dataframe): Dataframe to check against.
+
+    Returns:
+        _type_: _description_
+    """
+    merged_df = pd.merge(df1, df2,
+                         how="outer",
+                         indicator=True)
+    missing_rows = merged_df[merged_df["_merge"] == "left_only"][df1.columns]
+    return missing_rows
