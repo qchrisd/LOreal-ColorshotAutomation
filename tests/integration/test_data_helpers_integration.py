@@ -1,5 +1,6 @@
 
 ## Imports
+import pytest
 import pandas as pd
 
 # Testing module
@@ -12,19 +13,17 @@ def test_get_filepaths_integration():
     actual = get_filepaths("./tests/integration_files/test_filepaths.txt")
     assert actual == expected
     
-    
-def test_get_data():
-    # Test case 2 files
-    expected = pd.read_excel("./tests/integration_files/get_data expected.xlsx")
-    actual = get_data(["./tests/integration_files/Test File 1.xlsx",
-                       "./tests/integration_files/Test File 2.xlsx"])
+
+@pytest.mark.parametrize("test_cases,expected",
+                         [(["./tests/integration_files/Test File 1.xlsx", "./tests/integration_files/Test File 2.xlsx"],
+                           pd.read_excel("./tests/integration_files/get_data expected.xlsx")),
+                          (["./tests/integration_files/Test File 1.xlsx"],
+                           pd.read_excel("./tests/integration_files/Test File 1.xlsx", sheet_name="Plan"))
+                          ])
+def test_get_data(test_cases, expected):
+    actual = get_data(test_cases)
     pd.testing.assert_frame_equal(actual, expected)
     
-    # Test case 1 file
-    expected = pd.read_excel("./tests/integration_files/Test File 1.xlsx", 
-                             sheet_name="Plan")
-    actual = get_data(["./tests/integration_files/Test File 1.xlsx"])
-    pd.testing.assert_frame_equal(actual, expected)
     
     
 if __name__ == "__main__":
