@@ -1,6 +1,8 @@
 # Custom extensions
 *.confidential
 
+*.vscode
+
 ### Python gitignore template from github
 # Byte-compiled / optimized / DLL files
 __pycache__/
