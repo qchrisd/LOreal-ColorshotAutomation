@@ -4,3 +4,8 @@
 ## Imports
 
 
+def get_filepaths(text_file):
+    with open(text_file) as file:
+        lines = file.readlines()
+        
+    return lines
