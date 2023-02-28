@@ -21,8 +21,9 @@ def driver():
     data = get_data(data_filepaths)
     
     # Find new data
-    if master_data.columns == []:
-        master_data.columns = data.columns
+    if master_data.columns.size == 0:
+        for column_name in data.columns:
+            master_data = master_data.assign(**{column_name:None})
     new_data = get_missing_rows(data, master_data)
     
     #TODO Find sets of standards
