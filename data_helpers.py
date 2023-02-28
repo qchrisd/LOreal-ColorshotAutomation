@@ -5,6 +5,14 @@
 import pandas as pd
 
 def get_filepaths(text_file):
+    """Reads the data filepaths in from a file
+
+    Args:
+        text_file (string): File path for the text file that contains the paths to the data files.
+
+    Returns:
+        list: List of strings containing data file paths.
+    """
     with open(text_file) as file:
         lines = file.read().splitlines()
         
@@ -16,6 +24,9 @@ def get_data(file_paths):
 
     Args:
         file_paths (list): A list of file paths to get data from.
+        
+    Returns:
+        pandas.Dataframe: Data from all files provided in the file_paths list 
     """
     
     list_of_dfs = []
@@ -29,3 +40,5 @@ def get_data(file_paths):
                          axis=0)
     
     return all_data
+
+
