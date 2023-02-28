@@ -1,5 +1,5 @@
 # Custom extensions
-.confidential
+*.confidential
 
 ### Python gitignore template from github
 # Byte-compiled / optimized / DLL files
