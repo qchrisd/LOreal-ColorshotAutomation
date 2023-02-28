@@ -4,7 +4,7 @@ This program takes raw data files from the Neutone Colorshot, compiles them, and
 Name | Role
 --|--
 Liwayway Piano | Customer, Designer
-Thomas Tomasia | Customer, Designer
+Thomas Tomsia | Customer, Designer
 Chris Quartararo | Author, Designer
 
 ## Design
