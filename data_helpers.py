@@ -57,3 +57,7 @@ def get_missing_rows(df1, df2):
                          indicator=True)
     missing_rows = merged_df[merged_df["_merge"] == "left_only"][df1.columns]
     return missing_rows
+
+
+def find_standard(name_string: str):
+    pass
