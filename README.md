@@ -7,6 +7,26 @@ Liwayway Piano | Customer, Designer
 Thomas Tomsia | Customer, Designer
 Chris Quartararo | Author, Designer
 
+## Project Progress
+Below are the steps anticipated to deliver a minimum product.
+
+- :white_check_mark: Find data files.
+- :white_check_mark: Read data files into one large table.
+- :white_check_mark: Compare files to a master list to find just the new data.
+- :white_large_square: Group sets together.
+- :large_orange_diamond: Find and mark standards.
+- :white_large_square: Calculate colorimetry.
+- :white_large_square: Build report file.
+    - :white_large_square: Test comparison of new data to report file works.
+- :white_large_square: Backup report file.
+
+Key:
+- :white_check_mark: - Completed
+- :large_orange_diamond: - In Progress
+- :white_large_square: - Todo
+- :red_circle: - Issues that prevent progress
+- :x: - Removed or changed requirement
+
 ## Design
 This workflow was designed to fit that of the CPD team of Liwayway and Thomas. Thus if this is being used for additional teams, certain conventions may need to be adopted in terms of data storage and labelling to ensure proper data discover and functionality.
 
