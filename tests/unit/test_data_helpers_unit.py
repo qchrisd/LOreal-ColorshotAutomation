@@ -41,7 +41,8 @@ def test_find_standard(input, expected):
                                             "STD":[True,False,False,True,True]}))
                          ])
 def test_mark_standards(input_dataframe,expected):
-    pass
+    actual = mark_standards(input_dataframe)
+    pd.testing.assert_frame_equal(actual, expected)
      
 if __name__ == "__main__":
     test_get_missing_rows()
