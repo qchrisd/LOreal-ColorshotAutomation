@@ -13,12 +13,14 @@ Below are the steps anticipated to deliver a minimum product.
 - :white_check_mark: Find data files.
 - :white_check_mark: Read data files into one large table.
 - :white_check_mark: Compare files to a master list to find just the new data.
-- :white_large_square: Group sets together.
-- :large_orange_diamond: Find and mark standards.
+- :large_orange_diamond: Group sets together.
+- :white_check_mark: Find and mark standards.
 - :white_large_square: Calculate colorimetry.
 - :white_large_square: Build report file.
     - :white_large_square: Test comparison of new data to report file works.
 - :white_large_square: Backup report file.
+- :white_large_square: Final Integration testing.
+- :white_large_square: Package module into a standalone executable.
 
 Key:
 - :white_check_mark: - Completed
