@@ -2,6 +2,7 @@
 *.confidential
 
 *.vscode
+*.code-workspace
 
 ### Python gitignore template from github
 # Byte-compiled / optimized / DLL files
