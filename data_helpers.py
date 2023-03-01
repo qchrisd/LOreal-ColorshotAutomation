@@ -68,4 +68,5 @@ def find_standard(name_string: str):
 
 
 def mark_standards(data_set: pd.DataFrame):
-    pass
+    data_set["STD"] = data_set["Name"].apply(find_standard)
+    return data_set
