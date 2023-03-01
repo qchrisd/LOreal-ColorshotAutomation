@@ -6,7 +6,7 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from data_helpers import get_missing_rows, find_standard
+from data_helpers import get_missing_rows, find_standard, mark_standards
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -32,7 +32,16 @@ def test_get_missing_rows(df1, df2, expected):
 def test_find_standard(input, expected):
     actual = find_standard(input)
     assert actual == expected
-    
+
+
+@pytest.mark.parametrize("input_dataframe,expected",
+                         [
+                             (pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"]}),
+                              pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"],
+                                            "STD":[True,False,False,True,True]}))
+                         ])
+def test_mark_standards(input_dataframe,expected):
+    pass
      
 if __name__ == "__main__":
     test_get_missing_rows()

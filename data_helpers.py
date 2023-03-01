@@ -65,4 +65,7 @@ def find_standard(name_string: str):
     if std_regex.search(name_string):
         return True
     return False
-    
+
+
+def mark_standards(data_set: pd.DataFrame):
+    pass
