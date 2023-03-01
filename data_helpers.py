@@ -3,6 +3,7 @@
 
 ## Imports
 import pandas as pd
+import re
 
 def get_filepaths(text_file):
     """Reads the data filepaths in from a file
@@ -60,4 +61,8 @@ def get_missing_rows(df1, df2):
 
 
 def find_standard(name_string: str):
-    pass
+    std_regex = re.compile(".*[Ss][Tt][Dd]$")
+    if std_regex.search(name_string):
+        return True
+    return False
+    
