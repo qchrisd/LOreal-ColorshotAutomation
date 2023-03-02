@@ -34,6 +34,8 @@ def get_data(file_paths):
     for path in file_paths:
         current_file_df = pd.read_excel(path,
                                      sheet_name="Plan")
+        current_file_df["Date"] = pd.to_datetime(current_file_df["Date"],
+                                                 format="%Y%m%d-%H%M%S")
         list_of_dfs.append(current_file_df)
     
     all_data = pd.concat(list_of_dfs,
