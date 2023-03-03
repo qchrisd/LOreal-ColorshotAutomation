@@ -118,4 +118,7 @@ def mark_shade_names(data_set: pd.DataFrame):
 
 
 def get_groups(data_set: pd.DataFrame):
-    pass
+    groups = data_set.groupby(["Date","ShadeName","Fiber"]).size().reset_index()
+    groups.drop(columns=[0])
+    return groups
+    
