@@ -63,6 +63,14 @@ def get_missing_rows(df1, df2):
 
 
 def find_standard(name_string: str):
+    """Determines if a string ends with "STD" tag in any case combination.
+
+    Args:
+        name_string (str): The string to check.
+
+    Returns:
+        bool: True if the name ends in the "STD" tag. False if not.
+    """
     std_regex = re.compile(".*[Ss][Tt][Dd]$")
     if std_regex.search(name_string):
         return True
@@ -70,16 +78,40 @@ def find_standard(name_string: str):
 
 
 def mark_standards(data_set: pd.DataFrame):
+    """Adds a column to a dataframe marking standards.
+
+    Args:
+        data_set (pd.DataFrame): Dataset containing a "Name" column filled with strings.
+
+    Returns:
+        pd.DataFrame: A new pandas dataframe with a "STD" column added.
+    """
     data_set["STD"] = data_set["Name"].apply(find_standard)
     return data_set
 
 
 def extract_shade_name(name_string: str):
+    """Extracts a clean "token" shade name without a "STD" tag if present.
+
+    Args:
+        name_string (str): String to clean.
+
+    Returns:
+        str: A version of name_string without the "STD" tag.
+    """
     if find_standard(name_string):
         name_string = name_string[:-3]
     return name_string
 
 
 def mark_shade_names(data_set: pd.DataFrame):
+    """Adds a column to a dataframe with clean tagless shade names.
+
+    Args:
+        data_set (pd.DataFrame): A dataset containing a "Name" column of strings.
+
+    Returns:
+        pd.DataFrame: A new pandas dataframe with a "ShadeName" column added.
+    """
     data_set["ShadeName"] = data_set["Name"].apply(extract_shade_name)
     return data_set
