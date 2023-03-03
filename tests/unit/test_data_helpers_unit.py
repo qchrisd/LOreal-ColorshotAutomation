@@ -76,17 +76,19 @@ def test_mark_shade_names(input, expected):
 
 @pytest.mark.parametrize("input,expected",
                          [
-                             ({"Date":["20220502-120000","20220502-120010","20220502-120020","20220502-120030","20220505-120030","20220505-120050"],
-                               "Name":["ShadeName01","ShadeName01STD","ShadeName01","ShadeName01STD","ShadeName02","ShadeName02STD"],
-                               "Nuance":["5A","5A","5A","5A","6A","6A"],
-                               "Fiber":["BN","BN","BP","BP","BP","BP"],
-                               "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01""ShadeName02","ShadeName02"]},
-                              {"Date":[pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220505, format="%Y%m%d")],
-                               "ShadeName":["ShadeName01","ShadeName01","ShadeName02"],
-                               "Fiber":["BN","BP","BP"]}
+                             (pd.DataFrame({"Date":["20220502-120000","20220502-120010","20220502-120020","20220502-120030","20220505-120030","20220505-120050"],
+                                            "Name":["ShadeName01","ShadeName01STD","ShadeName01","ShadeName01STD","ShadeName02","ShadeName02STD"],
+                                            "Nuance":["5A","5A","5A","5A","6A","6A"],
+                                            "Fiber":["BN","BN","BP","BP","BP","BP"],
+                                            "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01","ShadeName02","ShadeName02"]}),
+                              pd.DataFrame({"Date":[pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220505, format="%Y%m%d")],
+                                            "ShadeName":["ShadeName01","ShadeName01","ShadeName02"],
+                                            "Fiber":["BN","BP","BP"]})
                               )
                          ])
 def test_get_groups(input, expected):
+    input["Date"] = pd.to_datetime(input["Date"],
+                                   format="%Y%m%d-%H%M%S")
     actual = get_groups(input)
     np.array_equal(actual.values, expected.values)
 
