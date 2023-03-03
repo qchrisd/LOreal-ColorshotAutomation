@@ -72,3 +72,7 @@ def find_standard(name_string: str):
 def mark_standards(data_set: pd.DataFrame):
     data_set["STD"] = data_set["Name"].apply(find_standard)
     return data_set
+
+
+def extract_shade_name(name_string: str):
+    pass

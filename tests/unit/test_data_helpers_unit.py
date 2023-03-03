@@ -6,7 +6,7 @@ import pytest
 import pandas as pd
 import numpy as np
 
-from data_helpers import get_missing_rows, find_standard, mark_standards
+from data_helpers import get_missing_rows, find_standard, mark_standards, extract_shade_name
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -43,6 +43,11 @@ def test_find_standard(input, expected):
 def test_mark_standards(input_dataframe,expected):
     actual = mark_standards(input_dataframe)
     pd.testing.assert_frame_equal(actual, expected)
+     
+
+def test_extract_shade_name(input, expected):
+    pass
+     
      
 if __name__ == "__main__":
     test_get_missing_rows()
