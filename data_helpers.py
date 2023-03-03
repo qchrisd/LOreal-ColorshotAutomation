@@ -78,3 +78,8 @@ def extract_shade_name(name_string: str):
     if find_standard(name_string):
         name_string = name_string[:-3]
     return name_string
+
+
+def mark_shade_names(data_set: pd.DataFrame):
+    data_set["ShadeName"] = data_set["Name"].apply(extract_shade_name)
+    return data_set
