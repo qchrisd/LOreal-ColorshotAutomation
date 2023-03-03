@@ -45,8 +45,17 @@ def test_mark_standards(input_dataframe,expected):
     pd.testing.assert_frame_equal(actual, expected)
      
 
+@pytest.mark.parametrize("input,expected",
+                         [
+                             ("Shade5ASTD","Shade5A"),
+                             ("Gaiav2Shade5A","Gaiav2Shade5A"),
+                             ("ShadeSTDname","ShadeSTDname"),
+                             ("shade5astd","shade5a"),
+                             ("Shade5AsTd","Shade5A")
+                         ])
 def test_extract_shade_name(input, expected):
-    pass
+    actual = extract_shade_name(input)
+    assert actual == expected
      
      
 if __name__ == "__main__":
