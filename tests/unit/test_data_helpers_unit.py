@@ -10,7 +10,8 @@ from data_helpers import (get_missing_rows,
                           find_standard, 
                           mark_standards, 
                           extract_shade_name, 
-                          mark_shade_names)
+                          mark_shade_names,
+                          get_groups)
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -71,7 +72,24 @@ def test_extract_shade_name(input, expected):
 def test_mark_shade_names(input, expected):
     actual = mark_shade_names(input)
     assert np.array_equal(actual.values, expected.values)
-     
+
+
+@pytest.mark.parametrize("input,expected",
+                         [
+                             ({"Date":["20220502-120000","20220502-120010","20220502-120020","20220502-120030","20220505-120030","20220505-120050"],
+                               "Name":["ShadeName01","ShadeName01STD","ShadeName01","ShadeName01STD","ShadeName02","ShadeName02STD"],
+                               "Nuance":["5A","5A","5A","5A","6A","6A"],
+                               "Fiber":["BN","BN","BP","BP","BP","BP"],
+                               "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01""ShadeName02","ShadeName02"]},
+                              {"Date":[pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220505, format="%Y%m%d")],
+                               "ShadeName":["ShadeName01","ShadeName01","ShadeName02"],
+                               "Fiber":["BN","BP","BP"]}
+                              )
+                         ])
+def test_get_groups(input, expected):
+    actual = get_groups(input)
+    np.array_equal(actual.values, expected.values)
+
      
 if __name__ == "__main__":
     test_get_missing_rows()

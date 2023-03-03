@@ -115,3 +115,7 @@ def mark_shade_names(data_set: pd.DataFrame):
     """
     data_set["ShadeName"] = data_set["Name"].apply(extract_shade_name)
     return data_set
+
+
+def get_groups(data_set: pd.DataFrame):
+    pass
