@@ -75,4 +75,6 @@ def mark_standards(data_set: pd.DataFrame):
 
 
 def extract_shade_name(name_string: str):
-    pass
+    if find_standard(name_string):
+        name_string = name_string[:-3]
+    return name_string
