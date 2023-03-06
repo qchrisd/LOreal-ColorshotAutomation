@@ -120,6 +120,14 @@ def mark_shade_names(data_set: pd.DataFrame):
 
 
 def get_groups(data_set: pd.DataFrame):
+    """Returns all possible groups based on date, shade name, and hair type
+
+    Args:
+        data_set (pd.DataFrame): Dataframe with at least columns `Date`, `ShadeName`, and `Fiber`.
+
+    Returns:
+        pd.DataFrame: DataFrame with the same column names where one row is one group.
+    """
     groups = data_set.groupby([pd.Grouper(key="Date", freq="1D"),"ShadeName","Fiber"]).size().reset_index()
     groups = groups.drop(columns=[0])
     return groups
@@ -129,6 +137,17 @@ def filter_for_group(data: pd.DataFrame,
                      group_date: datetime.datetime, 
                      shade_name: str, 
                      hair_type: str):
+    """Gets a single set's data.
+
+    Args:
+        data (pd.DataFrame): Dataframe with all data points.
+        group_date (datetime.datetime): The date to filter by
+        shade_name (str): The shade name to filter by.
+        hair_type (str): The hair type to filter by.
+
+    Returns:
+        pd.DataFrame: A truncated version of the dataset with just the desired criteria.
+    """
     filter_criteria = np.where((data["Date"].dt.date == group_date.date()) &
                                (data["ShadeName"] == shade_name) &
                                (data["Fiber"] == hair_type))
