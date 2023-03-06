@@ -35,6 +35,8 @@ def driver():
     new_data = mark_shade_names(new_data)
     
     # Process sets
+    bad_comparisons = []
+    good_comparisons = []
     sets = get_groups(new_data)
     print(sets)
     for index, row in sets.iterrows():
@@ -43,11 +45,21 @@ def driver():
                                          date,
                                          shade_name,
                                          hair_type)
-        print(date, shade_name, hair_type, filtered_data.shape[0], sum(filtered_data["STD"]))
-
-        #TODO Separate sets that can be calculated from those who cannot
         
-        #TODO Calculate colorimetry
+        print(date, shade_name, hair_type, filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
+
+        if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
+            bad_comparisons.append(filtered_data)
+        elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
+            #TODO Narrow filter band
+            pass
+        else:
+            good_comparisons.append(filtered_data)      
+        
+        good_comparisons = pd.merge(good_comparisons)
+        bad_comparisons = pd.merge(bad_comparisons)
+        
+        #TODO Calculate colorimetry on good_comparisons
 
     #TODO Back up file
     
