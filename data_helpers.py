@@ -122,3 +122,9 @@ def get_groups(data_set: pd.DataFrame):
     groups.drop(columns=[0])
     return groups
     
+    
+def filter_for_group(data: pd.DataFrame, 
+                     group_date, 
+                     shade_name: str, 
+                     hair_type: str):
+    pass
