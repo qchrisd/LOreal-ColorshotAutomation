@@ -31,9 +31,9 @@ def test_get_missing_rows(df1, df2, expected):
                          [
                              ("Shade5ASTD",True),
                              ("Gaiav2Shade5A",False),
-                             ("ShadeSTDname",False),
-                             ("shade5astd",True),
-                             ("Shade5AsTd",True)
+                             ("ShadeSTDname",True),
+                             ("shade5astd",False),
+                             ("Shade5AsTd",False)
                          ])
 def test_find_standard(input, expected):
     actual = find_standard(input)
@@ -44,7 +44,7 @@ def test_find_standard(input, expected):
                          [
                              (pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"]}),
                               pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"],
-                                            "STD":[True,False,False,True,True]}))
+                                            "STD":[True,False,True,False,False]}))
                          ])
 def test_mark_standards(input_dataframe,expected):
     actual = mark_standards(input_dataframe)
@@ -55,9 +55,9 @@ def test_mark_standards(input_dataframe,expected):
                          [
                              ("Shade5ASTD","Shade5A"),
                              ("Gaiav2Shade5A","Gaiav2Shade5A"),
-                             ("ShadeSTDname","ShadeSTDname"),
-                             ("shade5astd","shade5a"),
-                             ("Shade5AsTd","Shade5A")
+                             ("ShadeSTDname","Shadename"),
+                             ("shade5astd","shade5astd"),
+                             ("Shade5AsTd","Shade5AsTd")
                          ])
 def test_extract_shade_name(input, expected):
     actual = extract_shade_name(input)
@@ -68,7 +68,7 @@ def test_extract_shade_name(input, expected):
                          [
                              (pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"]}),
                               pd.DataFrame({"Name":["Shade5ASTD","Gaiav2Shade5A","ShadeSTDname","shade5astd","Shade5AsTd"],
-                                            "ShadeName":["Shade5A","Gaiav2Shade5A","ShadeSTDname","shade5a","Shade5A"]}))
+                                            "ShadeName":["Shade5A","Gaiav2Shade5A","Shadename","shade5astd","Shade5AsTd"]}))
                          ])
 def test_mark_shade_names(input, expected):
     actual = mark_shade_names(input)

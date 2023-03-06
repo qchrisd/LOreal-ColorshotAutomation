@@ -73,7 +73,8 @@ def find_standard(name_string: str):
     Returns:
         bool: True if the name ends in the "STD" tag. False if not.
     """
-    std_regex = re.compile(".*[Ss][Tt][Dd]$")
+    # std_regex = re.compile(".*[Ss][Tt][Dd]$")  # Filter for finding STD tag at the end of the line
+    std_regex = re.compile(".*STD.*")
     if std_regex.search(name_string):
         return True
     return False
@@ -102,7 +103,7 @@ def extract_shade_name(name_string: str):
         str: A version of name_string without the "STD" tag.
     """
     if find_standard(name_string):
-        name_string = name_string[:-3]
+        name_string = name_string.replace("STD", "")
     return name_string
 
 
