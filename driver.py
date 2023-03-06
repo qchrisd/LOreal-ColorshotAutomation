@@ -39,13 +39,20 @@ def driver():
     print(sets)
     for index, row in sets.iterrows():
         date, shade_name, hair_type = row
-        print(date, shade_name, hair_type)
         filtered_data = filter_for_group(new_data,
                                          date,
                                          shade_name,
                                          hair_type)
-        print(filtered_data.head())
-    #TODO Find sets of standards
+        print(date, shade_name, hair_type, filtered_data.shape[0], sum(filtered_data["STD"]))
+
+        #TODO Separate sets that can be calculated from those who cannot
+        
+        #TODO Calculate colorimetry
+
+    #TODO Back up file
+    
+    #TODO Write report file
+    
 
 ## Main
 if __name__ == "__main__":
