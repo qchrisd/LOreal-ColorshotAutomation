@@ -12,7 +12,8 @@ from data_helpers import (get_missing_rows,
                           extract_shade_name, 
                           mark_shade_names,
                           get_groups,
-                          filter_for_group)
+                          filter_for_group,
+                          calculate_colorimetry)
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -125,6 +126,38 @@ def test_filter_for_group(input_data, input_filter, expected):
                               hair_type)
     pd.testing.assert_frame_equal(actual, expected)
 
-     
+
+
+@pytest.mark.parametrize("input_std,input_comparison,expected",
+                         [
+                             (
+                                 pd.DataFrame({"L*":[19.11494255],
+                                               "a*":[8.54994297],
+                                               "b*":[9.243889809],
+                                               "C":[12.59170437],
+                                               "h°":[47.23336411]}),
+                                 pd.DataFrame({"L*":[20.61460876],
+                                               "a*":[17.27313232],
+                                               "b*":[19.65719032],
+                                               "C":[26.16803932],
+                                               "h°":[48.69363785]}),
+                                 {"delta_E2000":7.802,
+                                  "delta_L":1.500,
+                                  "delta_a":8.723,
+                                  "delta_b":10.413,
+                                  "delta_C":15.4530,  #! Make sure this is right
+                                  "delta_h":0.5273}   #! Make sure this is right
+                             )
+                         ])
+def test_calculate_colorimetry(input_std, input_comparison, expected):
+    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(input_std,input_comparison)
+    assert delta_E2000 == expected["delta_E2000"]
+    assert delta_L == expected["delta_L"]
+    assert delta_a == expected["delta_a"]
+    assert delta_b == expected["delta_b"]
+    assert delta_C == expected["delta_C"]
+    assert delta_h == expected["delta_h"]
+
+
 if __name__ == "__main__":
     test_get_missing_rows()

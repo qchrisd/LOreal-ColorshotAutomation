@@ -6,6 +6,8 @@ import pandas as pd
 import numpy as np
 import datetime
 import re
+from colour.difference import delta_E
+
 
 def get_filepaths(text_file):
     """Reads the data filepaths in from a file
@@ -154,3 +156,31 @@ def filter_for_group(data: pd.DataFrame,
                                (data["Fiber"] == hair_type))
     filtered_data = data.loc[filter_criteria]
     return filtered_data
+
+
+def calculate_colorimetry(data_std: pd.DataFrame,
+                          data_comparison: pd.DataFrame):
+    std_L = data_std.iloc[0]["L*"]
+    std_a = data_std.iloc[0]["a*"]
+    std_b = data_std.iloc[0]["b*"]
+    std_C = data_std.iloc[0]["C"]
+    std_h = data_std.iloc[0]["h°"]
+    comparison_L = data_comparison.iloc[0]["L*"]
+    comparison_a = data_comparison.iloc[0]["a*"]
+    comparison_b = data_comparison.iloc[0]["b*"]
+    comparison_C = data_comparison.iloc[0]["C"]
+    comparison_h = data_comparison.iloc[0]["h°"]
+    
+    std_lab = np.array([std_L, std_a, std_b]) 
+    comparison_lab = np.array([comparison_L, comparison_a, comparison_b])
+    delta_E2000 = delta_E(std_lab, comparison_lab,
+                          method = "CIE 2000")
+    
+    delta_E2000 = round(delta_E2000, 3)
+    delta_L = round(comparison_L-std_L, 3)
+    delta_a = round(comparison_a-std_a, 3)
+    delta_b = round(comparison_b-std_b, 3)
+    delta_C = round(comparison_C-std_C, 3)  #! Tom is doing a sqrt difference for some reason
+    delta_h = round(comparison_h-std_h, 3)  #! Some weird formula, probably so they don't go above 180deg
+    
+    return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h
