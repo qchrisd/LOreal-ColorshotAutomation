@@ -129,7 +129,7 @@ def filter_for_group(data: pd.DataFrame,
                      group_date: datetime.datetime, 
                      shade_name: str, 
                      hair_type: str):
-    filter_criteria = np.where((data["Date"].date() == group_date.date()) &
+    filter_criteria = np.where((data["Date"].dt.date == group_date.date()) &
                                (data["ShadeName"] == shade_name) &
                                (data["Fiber"] == hair_type))
     filtered_data = data.loc[filter_criteria]
