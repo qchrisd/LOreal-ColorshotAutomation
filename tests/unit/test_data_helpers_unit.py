@@ -11,7 +11,8 @@ from data_helpers import (get_missing_rows,
                           mark_standards, 
                           extract_shade_name, 
                           mark_shade_names,
-                          get_groups)
+                          get_groups,
+                          filter_for_group)
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -90,7 +91,39 @@ def test_get_groups(input, expected):
     input["Date"] = pd.to_datetime(input["Date"],
                                    format="%Y%m%d-%H%M%S")
     actual = get_groups(input)
-    np.array_equal(actual.values, expected.values)
+    pd.testing.assert_frame_equal(actual, expected)
+    # assert np.array_equal(actual.values, expected.values)
+
+
+@pytest.mark.parametrize("input_data,input_filter,expected",
+                         [
+                            (
+                                pd.DataFrame({"Date":["20220502-120000","20220502-120010","20220502-120020","20220502-120030","20220505-120030","20220505-120050"],
+                                              "Name":["ShadeName01","ShadeName01STD","ShadeName01","ShadeName01STD","ShadeName02","ShadeName02STD"],
+                                              "Nuance":["5A","5A","5A","5A","6A","6A"],
+                                              "Fiber":["BN","BN","BP","BP","BP","BP"],
+                                              "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01","ShadeName02","ShadeName02"]}
+                                ),
+                                [pd.to_datetime("20220502-120000", format="%Y%m%d-%H%M%S"), "ShadeName01", "BN"],
+                                pd.DataFrame({"Date":["20220502-120000","20220502-120010"],
+                                              "Name":["ShadeName01","ShadeName01STD",],
+                                              "Nuance":["5A","5A"],
+                                              "Fiber":["BN","BN"],
+                                              "ShadeName":["ShadeName01","ShadeName01"]}
+                                )
+                            )
+                         ])
+def test_filter_for_group(input_data, input_filter, expected):
+    group_date, shade_name, hair_type = input_filter
+    input_data["Date"] = pd.to_datetime(input_data["Date"],
+                                        format="%Y%m%d-%H%M%S")
+    expected["Date"] = pd.to_datetime(expected["Date"],
+                                      format="%Y%m%d-%H%M%S")
+    actual = filter_for_group(input_data,
+                              group_date,
+                              shade_name,
+                              hair_type)
+    pd.testing.assert_frame_equal(actual, expected)
 
      
 if __name__ == "__main__":
