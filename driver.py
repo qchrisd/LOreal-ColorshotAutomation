@@ -36,7 +36,6 @@ def driver():
     
     # Process sets
     bad_comparisons = []
-    good_comparisons = []
     sets = get_groups(new_data)
     print(sets)
     for index, row in sets.iterrows():
@@ -54,12 +53,10 @@ def driver():
             #TODO Narrow filter band
             pass
         else:
-            good_comparisons.append(filtered_data)      
-        
-        good_comparisons = pd.merge(good_comparisons)
-        bad_comparisons = pd.merge(bad_comparisons)
-        
-        #TODO Calculate colorimetry on good_comparisons
+            standard = filtered_data.loc[filtered_data["STD"] == True]
+            #TODO Calculate colorimetry
+            pass
+
 
     #TODO Back up file
     
