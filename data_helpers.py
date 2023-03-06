@@ -3,6 +3,8 @@
 
 ## Imports
 import pandas as pd
+import numpy as np
+import datetime
 import re
 
 def get_filepaths(text_file):
@@ -124,7 +126,11 @@ def get_groups(data_set: pd.DataFrame):
     
     
 def filter_for_group(data: pd.DataFrame, 
-                     group_date, 
+                     group_date: datetime.datetime, 
                      shade_name: str, 
                      hair_type: str):
-    pass
+    filter_criteria = np.where((data["Date"].date() == group_date.date()) &
+                               (data["ShadeName"] == shade_name) &
+                               (data["Fiber"] == hair_type))
+    filtered_data = data.loc[filter_criteria]
+    return filtered_data
