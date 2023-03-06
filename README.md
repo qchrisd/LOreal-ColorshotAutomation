@@ -31,7 +31,7 @@ Key:
 - :x: - Removed or changed requirement
 
 ## Design
-This workflow was designed to fit that of the CPD team of Liwayway and Thomas. Thus if this is being used for additional teams, certain conventions may need to be adopted in terms of data storage and labelling to ensure proper data discover and functionality.
+This workflow was designed to fit that of the CPD team of Liwayway and Thomas. Thus if this is  being used for additional teams, certain conventions may need to be adopted in terms of data storage and labelling to ensure proper data discover and functionality.
 
 ### Data
 Data are stored in the network drive mapped to `G:\`. The data files to include are indicated in a text file, each data file as it's own separate line following the example below.
