@@ -197,13 +197,14 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     delta_b = float(Decimal(comparison_b-std_b).quantize(round_digits))
     delta_C = float(Decimal(comparison_C_prime-std_C_prime).quantize(round_digits))
     delta_h = float(Decimal(delta_h_prime).quantize(round_digits))
+    delta_H = float(Decimal(2 * math.sqrt(std_C_prime * comparison_C_prime) * math.sin(math.radians(delta_h/2))).quantize(round_digits))
     
-    return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h
+    return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h, delta_H
 
 
 def report_comparison(standard: pd.DataFrame,
                       comparison: pd.DataFrame):
-    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(standard, comparison)
+    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h, delta_H = calculate_colorimetry(standard, comparison)
     new_row = pd.DataFrame({
         "Name Standard":[standard.iloc[0]["Name"]],
         "Shade Standard":[standard.iloc[0]["Nuance"]],
@@ -225,6 +226,7 @@ def report_comparison(standard: pd.DataFrame,
         "da*":[delta_a],
         "db*":[delta_b],
         "dC":[delta_C],
-        "dh":[delta_h]
+        "dh":[delta_h],
+        "dH (metric difference)":[delta_H]
     })
     return new_row

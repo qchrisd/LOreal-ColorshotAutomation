@@ -147,7 +147,8 @@ def test_filter_for_group(input_data, input_filter, expected):
                                   "delta_a":1.235,
                                   "delta_b":3.047,
                                   "delta_C":3.383,
-                                  "delta_h":2.972}
+                                  "delta_h":2.972,
+                                  "delta_H":0.927}
                              ),
                              (
                                  pd.DataFrame({"L*":[61.43],
@@ -165,7 +166,8 @@ def test_filter_for_group(input_data, input_filter, expected):
                                   "delta_a":1.47,
                                   "delta_b":-0.43,
                                   "delta_C":1.754,
-                                  "delta_h":11.755}
+                                  "delta_h":11.755,
+                                  "delta_H":1.396}
                              ),
                              (
                                  pd.DataFrame({"L*":[5.296],
@@ -183,17 +185,19 @@ def test_filter_for_group(input_data, input_filter, expected):
                                   "delta_a":1.410,
                                   "delta_b":-4.199,
                                   "delta_C":4.517,
-                                  "delta_h":-6.349}
+                                  "delta_h":-6.349,
+                                  "delta_H":-1.258}
                              )                         ]
                         )
 def test_calculate_colorimetry(input_std, input_comparison, expected):
-    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(input_std,input_comparison)
+    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h, delta_H = calculate_colorimetry(input_std,input_comparison)
     assert delta_E2000 == expected["delta_E2000"]
     assert delta_L == expected["delta_L"]
     assert delta_a == expected["delta_a"]
     assert delta_b == expected["delta_b"]
     assert delta_C == expected["delta_C"]
     assert delta_h == expected["delta_h"]
+    assert delta_H == expected["delta_H"]
 
 
 @pytest.mark.parametrize("input_std,input_comparison,expected",
@@ -251,7 +255,8 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
                                      "da*":[8.723],
                                      "db*":[10.413],
                                      "dC":[15.453],
-                                     "dh":[1.448]                                 
+                                     "dh":[1.448],
+                                     "dH (metric difference)":[0.527]                                 
                                  })
                              )
                          ])
