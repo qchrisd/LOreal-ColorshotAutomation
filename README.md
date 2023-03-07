@@ -17,7 +17,7 @@ Below are the steps anticipated to deliver a minimum product.
     - :large_orange_diamond: Deal with sets that are not matched 
 - :white_check_mark: Find and mark standards.
 - :white_check_mark: Calculate colorimetry.
-- :white_large_square: Build report file.
+- :large_orange_diamond: Build report file.
     - :white_large_square: Test comparison of new data to report file works.
 - :white_large_square: Backup report file.
 - :white_large_square: Final Integration testing.
