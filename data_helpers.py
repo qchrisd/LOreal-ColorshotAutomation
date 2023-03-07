@@ -165,12 +165,12 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     std_L = data_std.iloc[0]["L*"]
     std_a = data_std.iloc[0]["a*"]
     std_b = data_std.iloc[0]["b*"]
-    std_C = data_std.iloc[0]["C"]
+    std_C = math.sqrt(std_a**2 + std_b**2)
     std_h = data_std.iloc[0]["h°"]
     comparison_L = data_comparison.iloc[0]["L*"]
     comparison_a = data_comparison.iloc[0]["a*"]
     comparison_b = data_comparison.iloc[0]["b*"]
-    comparison_C = data_comparison.iloc[0]["C"]
+    comparison_C = math.sqrt(comparison_a**2 + comparison_b**2)
     comparison_h = data_comparison.iloc[0]["h°"]
     
     ave_C = (std_C + comparison_C)/2
@@ -179,6 +179,12 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     comparison_a_prime = comparison_a * (1 + factor_G)
     std_C_prime = math.sqrt(std_a_prime**2 + std_b**2)
     comparison_C_prime = math.sqrt(comparison_a_prime**2 + comparison_b**2)
+    
+    std_h_prime = math.degrees(math.atan2(std_a_prime,std_b))
+    comparison_h_prime = math.degrees(math.atan2(comparison_a_prime, comparison_b))
+    
+    # delta_h_prime = 180 - abs(abs(comparison_h_prime - std_h_prime) - 180)
+    delta_h_prime = -(((comparison_h_prime - std_h_prime) + 180) % 360 - 180)  # Finds smallest angle from std to comparison where '-' is anticlockwise, '+' is clockwise
     
     std_lab = np.array([std_L, std_a, std_b]) 
     comparison_lab = np.array([comparison_L, comparison_a, comparison_b])
@@ -190,7 +196,7 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     delta_L = float(Decimal(comparison_L-std_L).quantize(round_digits))
     delta_a = float(Decimal(comparison_a-std_a).quantize(round_digits))
     delta_b = float(Decimal(comparison_b-std_b).quantize(round_digits))
-    delta_C = float(Decimal(comparison_C_prime-std_C_prime).quantize(round_digits))  #! Tom is doing a sqrt difference for some reason
-    delta_h = float(Decimal(comparison_h-std_h).quantize(round_digits))  #! Some weird formula, probably so they don't go above 180deg
+    delta_C = float(Decimal(comparison_C_prime-std_C_prime).quantize(round_digits))
+    delta_h = float(Decimal(delta_h_prime).quantize(round_digits))
     
     return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h
