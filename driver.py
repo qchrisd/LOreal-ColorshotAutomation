@@ -11,7 +11,8 @@ from data_helpers import (get_filepaths,
                           mark_shade_names,
                           get_groups,
                           filter_for_group,
-                          report_comparison)
+                          report_comparison,
+                          write_data)
 
 def driver():
     """Main method of the program.
@@ -40,7 +41,7 @@ def driver():
     bad_comparisons = []
     sets = get_groups(new_data)
     
-    print(sets)  #! LOGGING
+    # print(sets)  #! LOGGING
     
     for _, row in sets.iterrows():
         date, nuance, hair_type = row
@@ -49,7 +50,7 @@ def driver():
                                          nuance,
                                          hair_type).reset_index()
         
-        print(date, nuance, hair_type, list(filtered_data["ShadeName"]), filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
+        # print(date, nuance, hair_type, list(filtered_data["ShadeName"]), filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
 
         if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
             bad_comparisons.append(filtered_data)
@@ -66,10 +67,10 @@ def driver():
                 comparison = filtered_data.loc[index:index+1]
                 good_comparisons.append(report_comparison(standard, comparison))
                 
-    good_comparisons = pd.concat(good_comparisons).reset_index() #! TEMP
-    good_comparisons.to_excel("./Test.xlsx",
-                              index=False,
-                              index_label=False)  #! LOggging
+    good_comparisons = pd.concat(good_comparisons, ignore_index=True)
+    write_data(good_comparisons,
+               None,
+               "./Test.xlsx")
 
     #TODO Back up file
     
