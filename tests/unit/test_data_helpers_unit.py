@@ -106,7 +106,7 @@ def test_get_groups(input, expected):
                                               "Fiber":["BN","BN","BP","BP","BP","BP"],
                                               "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01","ShadeName02","ShadeName02"]}
                                 ),
-                                [pd.to_datetime("20220502-120000", format="%Y%m%d-%H%M%S"), "ShadeName01", "BN"],
+                                [pd.to_datetime("20220502-120000", format="%Y%m%d-%H%M%S"), "5A", "BN"],
                                 pd.DataFrame({"Date":["20220502-120000","20220502-120010"],
                                               "Name":["ShadeName01","ShadeName01STD",],
                                               "Nuance":["5A","5A"],

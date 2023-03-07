@@ -43,13 +43,13 @@ def driver():
     print(sets)  #! LOGGING
     
     for _, row in sets.iterrows():
-        date, shade_name, hair_type = row
+        date, nuance, hair_type = row
         filtered_data = filter_for_group(new_data,
                                          date,
-                                         shade_name,
+                                         nuance,
                                          hair_type).reset_index()
         
-        print(date, shade_name, hair_type, filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
+        print(date, nuance, hair_type, filtered_data["ShadeName"], filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
 
         if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
             bad_comparisons.append(filtered_data)

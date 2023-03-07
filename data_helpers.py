@@ -140,7 +140,7 @@ def get_groups(data_set: pd.DataFrame):
     
 def filter_for_group(data: pd.DataFrame, 
                      group_date: datetime.datetime, 
-                     shade_name: str, 
+                     nuance: str, 
                      hair_type: str):
     """Gets a single set's data.
 
@@ -154,7 +154,7 @@ def filter_for_group(data: pd.DataFrame,
         pd.DataFrame: A truncated version of the dataset with just the desired criteria.
     """
     filter_criteria = np.where((data["Date"].dt.date == group_date.date()) &
-                               (data["ShadeName"] == shade_name) &
+                               (data["Nuance"] == nuance) &
                                (data["Fiber"] == hair_type))
     filtered_data = data.loc[filter_criteria]
     return filtered_data
