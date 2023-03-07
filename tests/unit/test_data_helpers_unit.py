@@ -13,7 +13,8 @@ from data_helpers import (get_missing_rows,
                           mark_shade_names,
                           get_groups,
                           filter_for_group,
-                          calculate_colorimetry)
+                          calculate_colorimetry,
+                          report_comparison)
 
 @pytest.mark.parametrize("df1,df2,expected",
                          [(pd.DataFrame({"col1":[1,2,3,4,5], "col2":["a","b","c","d","e"]}),
@@ -193,6 +194,17 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
     assert delta_b == expected["delta_b"]
     assert delta_C == expected["delta_C"]
     assert delta_h == expected["delta_h"]
+
+
+@pytest.mark.parametrize("input_std,input_comparison,expected",
+                         [
+                             (
+                                 
+                             )
+                         ])
+def test_report_comparison(input_std, input_comparison, expected):
+    actual = report_comparison(input_std, input_comparison)
+    pd.testing.assert_frame_equal(actual, expected)
 
 
 if __name__ == "__main__":

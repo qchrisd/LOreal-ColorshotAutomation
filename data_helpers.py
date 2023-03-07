@@ -199,3 +199,32 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     delta_h = float(Decimal(delta_h_prime).quantize(round_digits))
     
     return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h
+
+
+def report_comparison(standard: pd.DataFrame,
+                      comparison: pd.DataFrame):
+    delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(standard, comparison)
+    new_row = pd.DataFrame({
+        "Name Standard":[standard["Name"]],
+        "Shade Standard":[standard["Nuance"]],
+        "FLA Standard":[standard["Formula number"]],
+        "Fiber Standard":[standard["Fiber"]],
+        "L* Standard":[standard["L*"]],
+        "a* Standard":[standard["a*"]],
+        "b* Standard":[standard["b*"]],
+        "Name Comparison":[comparison["Name"]],
+        "Shade Comparison":[comparison["Nuance"]],
+        "FLA Comparison":[comparison["Formula number"]],
+        "Fiber Comparison":[comparison["Fiber"]],
+        "L* Comparison":[comparison["L*"]],
+        "a* Comparison":[comparison["a*"]],
+        "b* Comparison":[comparison["b*"]],
+        "Notes":[""],
+        "dE2000":[delta_E2000],
+        "dL*":[delta_L],
+        "da*":[delta_a],
+        "db*":[delta_b],
+        "dC":[delta_C],
+        "dh":[delta_h]
+    })
+    return new_row
