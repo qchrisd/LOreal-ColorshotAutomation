@@ -183,7 +183,6 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     std_h_prime = math.degrees(math.atan2(std_a_prime,std_b))
     comparison_h_prime = math.degrees(math.atan2(comparison_a_prime, comparison_b))
     
-    # delta_h_prime = 180 - abs(abs(comparison_h_prime - std_h_prime) - 180)
     delta_h_prime = -(((comparison_h_prime - std_h_prime) + 180) % 360 - 180)  # Finds smallest angle from std to comparison where '-' is anticlockwise, '+' is clockwise
     
     std_lab = np.array([std_L, std_a, std_b]) 
