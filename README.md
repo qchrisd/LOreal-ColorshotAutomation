@@ -16,7 +16,7 @@ Below are the steps anticipated to deliver a minimum product.
 - :white_check_mark: Group sets together.
     - :large_orange_diamond: Deal with sets that are not matched 
 - :white_check_mark: Find and mark standards.
-- :large_orange_diamond: Calculate colorimetry.
+- :white_check_mark: Calculate colorimetry.
 - :white_large_square: Build report file.
     - :white_large_square: Test comparison of new data to report file works.
 - :white_large_square: Backup report file.
@@ -59,13 +59,21 @@ The final product includes several colorimetry metrics that aid the chemists in 
 Metric | Description
 --|--
 $\Delta E_{00}$ | Total color difference using the Delta E2000 formula
-$\Delta L^*$ | Change in lightness, or ligher(+)/darker(-) than the comparison
+$\Delta L^*$ | Change in lightness, or ligher(+)/darker(-) than the standard
 $\Delta a^*$ | Change on the red(+)/green(-) axis
 $\Delta b^*$ | Change on the yellow(+)/blue(-) axis
 $\Delta C^*$ | Change in the magnitude of chroma
-$\Delta h^\circ$ | Change in the hue angle
+$\Delta h^\circ$ | Change (+ anticlockwise/-clockwise) in the hue angle from the standard $h^\circ$
 
-$\Delta E$ values are calculated with the [python-colormath](https://python-colormath.readthedocs.io/en/latest/) package. The other metrics are simply differences ($x_1-x_2=metric$) between the test formula and the standard of that set.
+$\Delta E$ values are calculated with the [colour-science](https://www.colour-science.org/) package. 
+
+$\Delta L^*$ and $\Delta b^*$ metrics are simply differences ($x_1-x_2=metric$) between the test formula and the standard of that set. 
+
+The $\Delta a^*$ calculation follows the same difference formula but uses a corrected ${a^*}'$ found by ${a^*}' = (1+ \bar{C}) * a^*$. 
+
+This same ${a^*}'$ is used to calculate corrected $C'$ values for the standard and comparison that are then used to find the difference using the previous formula.
+
+Finally, $\Delta h^\circ$ uses the corrected ${a^*}'$ values to find corrected ${\Delta h^\circ}'$ values which are then used to find the smallest angle difference starting from the standard and moving towards the comparison, measured in degrees. That formula is ${\Delta h^\circ}' = -((({h^\circ}'_{comparison} - {h^\circ}'_{standard}) + 180) \bmod 360 - 180)$, where "$\bmod$" is the modulo (or remainder) operator.
 
 ### Other Functionality
 Here is some other functionality that doesn't fit neatly into other sections.
