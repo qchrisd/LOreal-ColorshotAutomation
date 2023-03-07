@@ -131,24 +131,43 @@ def test_filter_for_group(input_data, input_filter, expected):
 @pytest.mark.parametrize("input_std,input_comparison,expected",
                          [
                              (
-                                 pd.DataFrame({"L*":[19.11494255],
-                                               "a*":[8.54994297],
-                                               "b*":[9.243889809],
-                                               "C":[12.59170437],
-                                               "h°":[47.23336411]}),
-                                 pd.DataFrame({"L*":[20.61460876],
-                                               "a*":[17.27313232],
-                                               "b*":[19.65719032],
-                                               "C":[26.16803932],
-                                               "h°":[48.69363785]}),
-                                 {"delta_E2000":7.802,
-                                  "delta_L":1.500,
-                                  "delta_a":8.723,
-                                  "delta_b":10.413,
-                                  "delta_C":15.4530,  #! Make sure this is right
-                                  "delta_h":0.5273}   #! Make sure this is right
+                                 pd.DataFrame({"L*":[28.500],
+                                               "a*":[8.391],
+                                               "b*":[11.176],
+                                               "C":[13.976],
+                                               "h°":[0]}),
+                                 pd.DataFrame({"L*":[22.433],
+                                               "a*":[9.626],
+                                               "b*":[14.223],
+                                               "C":[17.174],
+                                               "h°":[0]}),
+                                 {"delta_E2000":4.895,
+                                  "delta_L":-6.067,
+                                  "delta_a":1.235,
+                                  "delta_b":3.047,
+                                  "delta_C":3.383,
+                                  "delta_h":2.971}   #! Make sure this is right
+                             ),
+                             (
+                                 pd.DataFrame({"L*":[61.43],
+                                               "a*":[2.25],
+                                               "b*":[-4.96],
+                                               "C":[5.447],
+                                               "h°":[0]}),
+                                 pd.DataFrame({"L*":[61.29],
+                                               "a*":[3.72],
+                                               "b*":[-5.39],
+                                               "C":[6.549],
+                                               "h°":[0]}),
+                                 {"delta_E2000":1.871,
+                                  "delta_L":-0.1400,
+                                  "delta_a":1.47,
+                                  "delta_b":-0.43,
+                                  "delta_C":1.754,
+                                  "delta_h":11.755}   #! Make sure this is right
                              )
-                         ])
+                         ]
+                        )
 def test_calculate_colorimetry(input_std, input_comparison, expected):
     delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(input_std,input_comparison)
     assert delta_E2000 == expected["delta_E2000"]
