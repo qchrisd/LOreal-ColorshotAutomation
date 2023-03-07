@@ -230,3 +230,16 @@ def report_comparison(standard: pd.DataFrame,
         "dH (metric difference)":[delta_H]
     })
     return new_row
+
+
+def write_data(good_data: pd.DataFrame,
+               bad_data: pd.DataFrame,
+               output_file_path: str):
+    with pd.ExcelWriter(output_file_path,
+                        engine='xlsxwriter') as writer:
+        good_data.to_excel(writer,
+                           sheet_name="Report",
+                           index=False)
+        workbook = writer.book
+        worksheet = writer.sheets["Report"]
+        worksheet.set_column("A:A", 10, workbook.add_format({"bg_color":"#444444"}))
