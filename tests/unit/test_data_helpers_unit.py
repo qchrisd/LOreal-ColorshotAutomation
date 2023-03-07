@@ -199,7 +199,60 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
 @pytest.mark.parametrize("input_std,input_comparison,expected",
                          [
                              (
-                                 
+                                 # input_std
+                                 pd.DataFrame({
+                                     "Date":[pd.to_datetime("20220504-143057", format="%Y%m%d-%H%M%S")],
+                                     "User":["test.user"],
+                                     "Study":["test"],
+                                     "Name":["testSTDformula"],
+                                     "Nuance":["test.nuance"],
+                                     "Formula number":["12345std"],
+                                     "Fiber":["BP"],
+                                     "L*":[19.11494255],
+                                     "a*":[8.54994297],
+                                     "b*":[9.243889809],
+                                     "C":[12.59170437],
+                                     "h°":[47.23336411]
+                                 }),
+                                 # input_comparison
+                                 pd.DataFrame({
+                                     "Date":[pd.to_datetime("20220504-143403", format="%Y%m%d-%H%M%S")],
+                                     "User":["test.user"],
+                                     "Study":["test"],
+                                     "Name":["testformula"],
+                                     "Nuance":["test.nuance"],
+                                     "Formula number":["12345comp"],
+                                     "Fiber":["BP"],
+                                     "L*":[20.61460876],
+                                     "a*":[17.27313232],
+                                     "b*":[19.65719032],
+                                     "C":[26.16803932],
+                                     "h°":[48.69363785]
+                                 }),
+                                 # expected
+                                 pd.DataFrame({
+                                     "Name Standard":["testSTDformula"],
+                                     "Shade Standard":["test.nuance"],
+                                     "FLA Standard":["12345std"],
+                                     "Fiber Standard":["BP"],
+                                     "L* Standard":[19.11494255],
+                                     "a* Standard":[8.54994297],
+                                     "b* Standard":[9.243889809],
+                                     "Name Comparison":["testformula"],
+                                     "Shade Comparison":["test.nuance"],
+                                     "FLA Comparison":["12345comp"],
+                                     "Fiber Comparison":["BP"],
+                                     "L* Comparison":[20.61460876],
+                                     "a* Comparison":[17.27313232],
+                                     "b* Comparison":[19.65719032],
+                                     "Notes":[""],
+                                     "dE2000":[7.802],
+                                     "dL*":[1.5],
+                                     "da*":[8.723],
+                                     "db*":[10.413],
+                                     "dC":[15.453],
+                                     "dh":[1.448]                                 
+                                 })
                              )
                          ])
 def test_report_comparison(input_std, input_comparison, expected):
