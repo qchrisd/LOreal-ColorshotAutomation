@@ -49,7 +49,7 @@ def driver():
                                          nuance,
                                          hair_type).reset_index()
         
-        print(date, nuance, hair_type, filtered_data["ShadeName"], filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
+        print(date, nuance, hair_type, list(filtered_data["ShadeName"]), filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
 
         if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
             bad_comparisons.append(filtered_data)
@@ -60,14 +60,16 @@ def driver():
             pass
         else:
             standard = filtered_data.loc[filtered_data["STD"] == True]
-            print(filtered_data.index)
             for index in filtered_data.index:
+                if index == standard.index:  # Skips testing standards against themselves
+                    continue
                 comparison = filtered_data.loc[index:index+1]
-                print(index)
                 good_comparisons.append(report_comparison(standard, comparison))
                 
-    good_comparisons = pd.merge(good_comparisons) #! TEMP
-    print(good_comparisons.head())  #! LOggging
+    good_comparisons = pd.concat(good_comparisons).reset_index() #! TEMP
+    good_comparisons.to_excel("./Test.xlsx",
+                              index=False,
+                              index_label=False)  #! LOggging
 
     #TODO Back up file
     
