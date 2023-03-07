@@ -10,7 +10,8 @@ from data_helpers import (get_filepaths,
                           mark_standards,
                           mark_shade_names,
                           get_groups,
-                          filter_for_group)
+                          filter_for_group,
+                          report_comparison)
 
 def driver():
     """Main method of the program.
@@ -35,28 +36,38 @@ def driver():
     new_data = mark_shade_names(new_data)
     
     # Process sets
+    good_comparisons = []
     bad_comparisons = []
     sets = get_groups(new_data)
-    print(sets)
-    for index, row in sets.iterrows():
+    
+    print(sets)  #! LOGGING
+    
+    for _, row in sets.iterrows():
         date, shade_name, hair_type = row
         filtered_data = filter_for_group(new_data,
                                          date,
                                          shade_name,
-                                         hair_type)
+                                         hair_type).reset_index()
         
         print(date, shade_name, hair_type, filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
 
         if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
+            bad_comparisons.append(filtered_data)
+        elif sum(filtered_data["STD"]) < 1:  # No standards in the set
             bad_comparisons.append(filtered_data)
         elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
             #TODO Narrow filter band
             pass
         else:
             standard = filtered_data.loc[filtered_data["STD"] == True]
-            #TODO Calculate colorimetry
-            pass
-
+            print(filtered_data.index)
+            for index in filtered_data.index:
+                comparison = filtered_data.loc[index:index+1]
+                print(index)
+                good_comparisons.append(report_comparison(standard, comparison))
+                
+    good_comparisons = pd.merge(good_comparisons) #! TEMP
+    print(good_comparisons.head())  #! LOggging
 
     #TODO Back up file
     
