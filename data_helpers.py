@@ -2,6 +2,8 @@
 """data_helpers.py: Contains helpful methods for acquiring and manipulating data files and data structures."""
 
 ## Imports
+import math
+from decimal import Decimal
 import pandas as pd
 import numpy as np
 import datetime
@@ -171,16 +173,24 @@ def calculate_colorimetry(data_std: pd.DataFrame,
     comparison_C = data_comparison.iloc[0]["C"]
     comparison_h = data_comparison.iloc[0]["h°"]
     
+    ave_C = (std_C + comparison_C)/2
+    factor_G = 0.5 * (1 - math.sqrt(ave_C**7/(ave_C**7+25**7)))
+    std_a_prime = std_a * (1 + factor_G)
+    comparison_a_prime = comparison_a * (1 + factor_G)
+    std_C_prime = math.sqrt(std_a_prime**2 + std_b**2)
+    comparison_C_prime = math.sqrt(comparison_a_prime**2 + comparison_b**2)
+    
     std_lab = np.array([std_L, std_a, std_b]) 
     comparison_lab = np.array([comparison_L, comparison_a, comparison_b])
     delta_E2000 = delta_E(std_lab, comparison_lab,
                           method = "CIE 2000")
     
-    delta_E2000 = round(delta_E2000, 3)
-    delta_L = round(comparison_L-std_L, 3)
-    delta_a = round(comparison_a-std_a, 3)
-    delta_b = round(comparison_b-std_b, 3)
-    delta_C = round(comparison_C-std_C, 3)  #! Tom is doing a sqrt difference for some reason
-    delta_h = round(comparison_h-std_h, 3)  #! Some weird formula, probably so they don't go above 180deg
+    round_digits = Decimal("1.000")
+    delta_E2000 = float(Decimal(delta_E2000).quantize(round_digits))
+    delta_L = float(Decimal(comparison_L-std_L).quantize(round_digits))
+    delta_a = float(Decimal(comparison_a-std_a).quantize(round_digits))
+    delta_b = float(Decimal(comparison_b-std_b).quantize(round_digits))
+    delta_C = float(Decimal(comparison_C_prime-std_C_prime).quantize(round_digits))  #! Tom is doing a sqrt difference for some reason
+    delta_h = float(Decimal(comparison_h-std_h).quantize(round_digits))  #! Some weird formula, probably so they don't go above 180deg
     
     return delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h
