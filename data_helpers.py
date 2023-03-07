@@ -133,7 +133,7 @@ def get_groups(data_set: pd.DataFrame):
     Returns:
         pd.DataFrame: DataFrame with the same column names where one row is one group.
     """
-    groups = data_set.groupby([pd.Grouper(key="Date", freq="1D"),"ShadeName","Fiber"]).size().reset_index()
+    groups = data_set.groupby([pd.Grouper(key="Date", freq="1D"),"Nuance","Fiber"]).size().reset_index()
     groups = groups.drop(columns=[0])
     return groups
     

@@ -85,7 +85,7 @@ def test_mark_shade_names(input, expected):
                                             "Fiber":["BN","BN","BP","BP","BP","BP"],
                                             "ShadeName":["ShadeName01","ShadeName01","ShadeName01","ShadeName01","ShadeName02","ShadeName02"]}),
                               pd.DataFrame({"Date":[pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220502, format="%Y%m%d"),pd.to_datetime(20220505, format="%Y%m%d")],
-                                            "ShadeName":["ShadeName01","ShadeName01","ShadeName02"],
+                                            "Nuance":["5A","5A","6A"],
                                             "Fiber":["BN","BP","BP"]})
                               )
                          ])
