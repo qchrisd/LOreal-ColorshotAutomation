@@ -146,7 +146,7 @@ def test_filter_for_group(input_data, input_filter, expected):
                                   "delta_a":1.235,
                                   "delta_b":3.047,
                                   "delta_C":3.383,
-                                  "delta_h":2.971}   #! Make sure this is right
+                                  "delta_h":2.972}
                              ),
                              (
                                  pd.DataFrame({"L*":[61.43],
@@ -164,9 +164,26 @@ def test_filter_for_group(input_data, input_filter, expected):
                                   "delta_a":1.47,
                                   "delta_b":-0.43,
                                   "delta_C":1.754,
-                                  "delta_h":11.755}   #! Make sure this is right
-                             )
-                         ]
+                                  "delta_h":11.755}
+                             ),
+                             (
+                                 pd.DataFrame({"L*":[5.296],
+                                               "a*":[4.492],
+                                               "b*":[-6.538],
+                                               "C":[0],
+                                               "h°":[0]}),
+                                 pd.DataFrame({"L*":[6.704],
+                                               "a*":[5.902],
+                                               "b*":[-10.737],
+                                               "C":[0],
+                                               "h°":[0]}),
+                                 {"delta_E2000":3.29,
+                                  "delta_L":1.408,
+                                  "delta_a":1.410,
+                                  "delta_b":-4.199,
+                                  "delta_C":4.517,
+                                  "delta_h":-6.349}
+                             )                         ]
                         )
 def test_calculate_colorimetry(input_std, input_comparison, expected):
     delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h = calculate_colorimetry(input_std,input_comparison)
