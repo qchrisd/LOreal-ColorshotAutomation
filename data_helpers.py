@@ -232,7 +232,7 @@ def report_comparison(standard: pd.DataFrame,
     return new_row
 
 
-def write_data(good_data: pd.DataFrame,
+def write_report(good_data: pd.DataFrame,
                bad_data: pd.DataFrame,
                output_file_path: str):
     with pd.ExcelWriter(output_file_path,

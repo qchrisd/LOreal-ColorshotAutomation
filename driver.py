@@ -12,7 +12,7 @@ from data_helpers import (get_filepaths,
                           get_groups,
                           filter_for_group,
                           report_comparison,
-                          write_data)
+                          write_report)
 
 def driver():
     """Main method of the program.
@@ -68,7 +68,9 @@ def driver():
                 good_comparisons.append(report_comparison(standard, comparison))
                 
     good_comparisons = pd.concat(good_comparisons, ignore_index=True)
-    write_data(good_comparisons,
+    
+    
+    write_report(good_comparisons,
                None,
                "./Test.xlsx")
 
