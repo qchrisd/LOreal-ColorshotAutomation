@@ -24,7 +24,7 @@ def driver():
     # Get data held in the master file
     print("Getting previous ColorShot entries... ", end="", flush=True)
     try:
-        master_data = get_data(["./all_data.xlsx"], sheet_name="All Data")
+        master_data = get_data(["./all_data.xlsx"], sheet_name="All Data", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         master_data = pd.DataFrame()
@@ -56,13 +56,13 @@ def driver():
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
     new_data = get_missing_rows(data, master_data)  #TODO adjust missing rows algorithm to find rows that are not used in the report
-    all_data = pd.concat([master_data, new_data], ignore_index=True)  # Update all_data table
     
     # Label new data for colorimetry
     new_data = mark_standards(new_data)
     new_data = mark_shade_names(new_data)
     
     # Process sets
+    good_rows = []
     good_comparisons = []
     bad_comparisons = []
     sets = get_groups(new_data)
@@ -86,6 +86,7 @@ def driver():
             #TODO Narrow filter band
             pass
         else:
+            good_rows.append(filtered_data)
             standard = filtered_data.loc[filtered_data["STD"] == True]
             for index in filtered_data.index:
                 if index == standard.index:  # Skips testing standards against themselves
@@ -94,16 +95,27 @@ def driver():
                 good_comparisons.append(report_comparison(standard, comparison))
     
     # Handle edge cases where pd.concat() cannot merge list.
+    write_all_data_flag = True
+    if len(good_rows) == 0:
+        write_all_data_flag = False
+    elif len(good_rows) == 1:
+        all_data = good_rows[0]
+    else:
+        good_rows = pd.concat(good_rows, ignore_index=True)
+        all_data = pd.concat([master_data, good_rows], ignore_index=True)
+    
+    write_report_flag = True
     if len(good_comparisons) == 0:
-        print("No new data found.")
-        exit(0)
+        print("No new comparisons found.")
+        write_report_flag = False
     elif len(good_comparisons) == 1:
         good_comparisons = good_comparisons[0]
     else:            
         good_comparisons = pd.concat(good_comparisons, ignore_index=True)
     
+    write_bad_comparisons_flag = True
     if len(bad_comparisons) == 0:
-        pass
+        write_bad_comparisons_flag = False
     elif len(bad_comparisons) == 1:
         bad_comparisons = bad_comparisons[0]
         print("Some data points could not be assigned a set. Check the 'Bad Comparisons' file for this data.")
@@ -116,17 +128,21 @@ def driver():
     if previous_report_data.columns.size == 0:  # File did not exist
         for column_name in good_comparisons.columns:
             previous_report_data = previous_report_data.assign(**{column_name:None})
-    report_data = pd.concat([previous_report_data, good_comparisons])
+
     
     #TODO Back up file
 
     # Write files
-    write_all_data(all_data,
-                   "./all_data.xlsx")
-    write_report(report_data,
-               "./Colorimetry Report.xlsx")
-    write_bad_comparisons(bad_comparisons,
-                          "./Bad Comparisons.xlsx")
+    if write_all_data_flag:
+        write_all_data(all_data,
+                    "./all_data.xlsx")
+    if write_report_flag:
+        report_data = pd.concat([previous_report_data, good_comparisons])
+        write_report(report_data,
+                     "./Colorimetry Report.xlsx")
+    if write_bad_comparisons_flag:
+        write_bad_comparisons(bad_comparisons,
+                            "./Bad Comparisons.xlsx")
     
 
 ## Main
