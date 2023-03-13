@@ -5,11 +5,14 @@
 import os
 import shutil
 import math
+import time
+import datetime
+import re
+import progressbar
+from alive_progress import alive_bar
 from decimal import Decimal
 import pandas as pd
 import numpy as np
-import datetime
-import re
 from colour.difference import delta_E
 
 
@@ -316,27 +319,34 @@ def process_sets(sets: pd.DataFrame,
     good_comparisons = []
     bad_comparisons = []
     
-    for _, row in sets.iterrows():
-        date, nuance, hair_type = row
-        filtered_data = filter_for_group(new_data,
-                                         date,
-                                         nuance,
-                                         hair_type).reset_index(drop=True)
+    print("")
+    print("Processing sets...")
+    with alive_bar(sets.shape[0]) as bar:
+        for _, row in sets.iterrows():
         
-        if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
-            bad_comparisons.append(filtered_data)
-        elif sum(filtered_data["STD"]) < 1:  # No standards in the set
-            bad_comparisons.append(filtered_data)
-        elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
-            #TODO Narrow filter band
-            pass
-        else:
-            good_rows.append(filtered_data)
-            standard = filtered_data.loc[filtered_data["STD"] == True]
-            for index in filtered_data.index:
-                if index == standard.index:  # Skips testing standards against themselves
-                    continue
-                comparison = filtered_data.loc[index:index+1]
-                good_comparisons.append(report_comparison(standard, comparison))
+            date, nuance, hair_type = row
+            filtered_data = filter_for_group(new_data,
+                                            date,
+                                            nuance,
+                                            hair_type).reset_index(drop=True)
+            
+            if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
+                bad_comparisons.append(filtered_data)
+            elif sum(filtered_data["STD"]) < 1:  # No standards in the set
+                bad_comparisons.append(filtered_data)
+            elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
+                #TODO Narrow filter band
+                pass
+            else:
+                good_rows.append(filtered_data)
+                standard = filtered_data.loc[filtered_data["STD"] == True]
+                for index in filtered_data.index:
+                    if index == standard.index:  # Skips testing standards against themselves
+                        continue
+                    comparison = filtered_data.loc[index:index+1]
+                    good_comparisons.append(report_comparison(standard, comparison))
+            bar()
+
+    print("")
     
     return good_rows, good_comparisons, bad_comparisons
