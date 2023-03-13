@@ -26,7 +26,8 @@ def get_filepaths(text_file):
     return lines
 
 
-def get_data(file_paths):
+def get_data(file_paths: list,
+             sheet_name: str = "Plan"):
     """Gets data from a list of excel spreadsheets.
 
     Args:
@@ -39,9 +40,12 @@ def get_data(file_paths):
     list_of_dfs = []
     for path in file_paths:
         current_file_df = pd.read_excel(path,
-                                     sheet_name="Plan")
-        current_file_df["Date"] = pd.to_datetime(current_file_df["Date"],
-                                                 format="%Y%m%d-%H%M%S")
+                                     sheet_name=sheet_name)
+        try:
+            current_file_df["Date"] = pd.to_datetime(current_file_df["Date"],
+                                                    format="%Y%m%d-%H%M%S")
+        except:
+            pass
         list_of_dfs.append(current_file_df)
     
     all_data = pd.concat(list_of_dfs,
@@ -243,7 +247,6 @@ def write_all_data(all_data: pd.DataFrame,
 
 
 def write_report(good_data: pd.DataFrame,
-               bad_data: pd.DataFrame,
                output_file_path: str):
     with pd.ExcelWriter(output_file_path,
                         engine='xlsxwriter') as writer:
