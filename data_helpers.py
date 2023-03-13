@@ -278,3 +278,12 @@ def write_report(good_data: pd.DataFrame,
         # Write the column headers with the defined format.
         for col_num, value in enumerate(good_data.columns.values):
             worksheet.write(0, col_num, value, header_format)
+
+
+def write_bad_comparisons(all_data: pd.DataFrame,
+                   output_file_path: str):
+    with pd.ExcelWriter(output_file_path,
+                        engine="xlsxwriter") as writer:
+        all_data.to_excel(writer,
+                          sheet_name="Bad comparisons",
+                          index=False)
