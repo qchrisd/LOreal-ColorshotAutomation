@@ -28,7 +28,8 @@ def get_filepaths(text_file):
 
 #TODO Refactor so there is no default of "Plan" for the sheet name
 def get_data(file_paths: list,
-             sheet_name: str = "Plan"):
+             sheet_name: str = "Plan",
+             include_path: bool = True):
     """Gets data from a list of excel spreadsheets.
 
     Args:
@@ -47,7 +48,8 @@ def get_data(file_paths: list,
                                                     format="%Y%m%d-%H%M%S")
         except:
             pass
-        current_file_df["File Path"] = path
+        if include_path:
+            current_file_df["File Path"] = path
         list_of_dfs.append(current_file_df)
     
     all_data = pd.concat(list_of_dfs,
@@ -242,6 +244,8 @@ def report_comparison(standard: pd.DataFrame,
 
 def write_all_data(all_data: pd.DataFrame,
                    output_file_path: str):
+    all_data = all_data.drop(["STD","ShadeName"],
+                             axis=1)
     with pd.ExcelWriter(output_file_path,
                         engine="xlsxwriter") as writer:
         all_data.to_excel(writer,
