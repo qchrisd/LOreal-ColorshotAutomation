@@ -3,6 +3,7 @@
 """driver.py: Drives the colorshot data automation and colorimetry calculations."""
 
 ## Imports
+import sys
 import pandas as pd
 from data_helpers import (get_filepaths, 
                           get_data, 
@@ -25,18 +26,26 @@ def driver():
     try:
         master_data = get_data(["./all_data.xlsx"], sheet_name="All Data")
         print("Success")
-    except:  #TODO Except only file not found
+    except FileNotFoundError as e:
         master_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
+    except PermissionError as e:
+        print("Failed")
+        print("\nThe all_data.xlsx file cannot be accessed. You probably have it open or the permissions for the folder are wonky. Check this and try again.")
+        sys.exit(1)
         
     # Get data held in the previous report files
     print("Getting previous report entries... ", end="", flush=True)
     try:
         previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report")
         print("Success")
-    except:  #TODO Except only file not found
+    except FileNotFoundError as e:  #TODO Except only file not found
         previous_report_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
+    except PermissionError as e:
+        print("Failed")
+        print("\nThe Colorimetry Report.xlsx file cannot be accessed. You probably have it open or the permissions for the folder are wonky. Check this and try again.")
+        sys.exit(1)
     
     # Get data from the files
     data_filepaths = get_filepaths("./data_filepaths.confidential")
@@ -46,7 +55,7 @@ def driver():
     if master_data.columns.size == 0:
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
-    new_data = get_missing_rows(data, master_data)  #TODO adjust missing rows algorithm to find rows that are not used in the report maybe 
+    new_data = get_missing_rows(data, master_data)  #TODO adjust missing rows algorithm to find rows that are not used in the report
     all_data = pd.concat([master_data, new_data], ignore_index=True)  # Update all_data table
     
     # Label new data for colorimetry
