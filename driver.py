@@ -93,7 +93,7 @@ def driver():
     else:
         bad_comparisons = pd.concat(bad_comparisons, ignore_index=True)
         print("Some data points could not be assigned a set. Check the 'Bad Comparisons' file for this data.")
-
+    print("")
 
     # Process previous report data
     if previous_report_data.columns.size == 0:  # File did not exist
@@ -120,3 +120,4 @@ def driver():
 ## Main
 if __name__ == "__main__":
     driver()
+    print("\nFinished. Exiting the program.\n")
