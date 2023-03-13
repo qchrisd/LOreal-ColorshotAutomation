@@ -213,6 +213,7 @@ def report_comparison(standard: pd.DataFrame,
         "L* Standard":[standard.iloc[0]["L*"]],
         "a* Standard":[standard.iloc[0]["a*"]],
         "b* Standard":[standard.iloc[0]["b*"]],
+        " ":[None],
         "Name Comparison":[comparison.iloc[0]["Name"]],
         "Shade Comparison":[comparison.iloc[0]["Nuance"]],
         "FLA Comparison":[comparison.iloc[0]["Formula number"]],
@@ -246,9 +247,28 @@ def write_report(good_data: pd.DataFrame,
                output_file_path: str):
     with pd.ExcelWriter(output_file_path,
                         engine='xlsxwriter') as writer:
+
         good_data.to_excel(writer,
                            sheet_name="Report",
-                           index=False)
+                           index=False,
+                           header=False,
+                           startrow=1)
         workbook = writer.book
         worksheet = writer.sheets["Report"]
-        worksheet.set_column("A:A", 10, workbook.add_format({"bg_color":"#444444"}))
+        worksheet.set_column("H:H", 1, workbook.add_format({"bg_color":"#595959"}))
+        worksheet.set_column("Q:Q", 10, workbook.add_format({"bg_color":"#FCD5B4"}))
+        worksheet.set_column("R:W", 10, workbook.add_format({"bg_color":"#D5E8FF"}))
+        # worksheet.set_row(":W", 10, workbook.add_format({"bg_color":"#D5E8FF"}))
+
+        # Add a header format.
+        header_format = workbook.add_format({
+            'bold': True,
+            'text_wrap': True,
+            'valign': 'top',
+            'font_color': '#F2F2F2',
+            'bg_color': '#595959',
+            'border': 1})
+
+        # Write the column headers with the defined format.
+        for col_num, value in enumerate(good_data.columns.values):
+            worksheet.write(0, col_num, value, header_format)
