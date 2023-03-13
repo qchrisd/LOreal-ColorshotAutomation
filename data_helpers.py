@@ -69,6 +69,7 @@ def get_missing_rows(df1, df2):
                          how="outer",
                          indicator=True)
     missing_rows = merged_df[merged_df["_merge"] == "left_only"][df1.columns]
+    missing_rows = missing_rows.reset_index()
     return missing_rows
 
 
