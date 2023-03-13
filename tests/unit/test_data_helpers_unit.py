@@ -26,7 +26,7 @@ from data_helpers import (get_missing_rows,
                           ])
 def test_get_missing_rows(df1, df2, expected):
     actual = get_missing_rows(df1, df2)
-    assert np.array_equal(actual.values, expected.values)
+    pd.testing.assert_frame_equal(actual, expected)
      
 
 @pytest.mark.parametrize("input,expected",
@@ -242,6 +242,7 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
                                      "L* Standard":[19.11494255],
                                      "a* Standard":[8.54994297],
                                      "b* Standard":[9.243889809],
+                                     " ":[None],
                                      "Name Comparison":["testformula"],
                                      "Shade Comparison":["test.nuance"],
                                      "FLA Comparison":["12345comp"],
