@@ -12,17 +12,30 @@ from data_helpers import (get_filepaths,
                           get_groups,
                           filter_for_group,
                           report_comparison,
-                          write_report)
+                          write_report,
+                          write_all_data)
 
 def driver():
     """Main method of the program.
     """
     
     # Get data held in the master file
+    print("Getting previous ColorShot entries... ", end="", flush=True)
     try:
-        master_data = get_data(["./all_data.xlsx"])
+        master_data = get_data(["./all_data.xlsx"], sheet_name="All Data")
+        print("Success")
     except:
         master_data = pd.DataFrame()
+        print("Did not find a file. Creating a new dataframe.")
+        
+    # Get data held in the previous report files
+    print("Getting previous report entries... ", end="", flush=True)
+    try:
+        previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report")
+        print("Success")
+    except:
+        previous_report_data = pd.DataFrame()
+        print("Did not find a file. Creating a new dataframe.")
     
     # Get data from the files
     data_filepaths = get_filepaths("./data_filepaths.confidential")
@@ -33,6 +46,7 @@ def driver():
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
     new_data = get_missing_rows(data, master_data)
+    all_data = pd.concat([master_data, new_data], ignore_index=True)
     new_data = mark_standards(new_data)
     new_data = mark_shade_names(new_data)
     
@@ -66,17 +80,29 @@ def driver():
                     continue
                 comparison = filtered_data.loc[index:index+1]
                 good_comparisons.append(report_comparison(standard, comparison))
-                
-    good_comparisons = pd.concat(good_comparisons, ignore_index=True)
     
+    # Handle edge cases where pd.concat() cannot merge comparisons.
+    if len(good_comparisons) == 0:
+        print("No new data found.")
+        exit(0)
+    elif len(good_comparisons) == 1:
+        good_comparisons = good_comparisons[0]
+    else:            
+        good_comparisons = pd.concat(good_comparisons, ignore_index=True)
+
+    # Process previous report data
+    if previous_report_data.columns.size == 0:  # File did not exist
+        for column_name in good_comparisons.columns:
+            previous_report_data = previous_report_data.assign(**{column_name:None})
+    report_data = pd.concat([previous_report_data, good_comparisons])
     
-    write_report(good_comparisons,
-               None,
-               "./Test.xlsx")
+    # Write files
+    write_all_data(all_data,
+                   "./all_data.xlsx")
+    write_report(report_data,
+               "./Colorimetry Report.xlsx")
 
     #TODO Back up file
-    
-    #TODO Write report file
     
 
 ## Main
