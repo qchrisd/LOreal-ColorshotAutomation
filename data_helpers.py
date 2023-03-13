@@ -232,6 +232,15 @@ def report_comparison(standard: pd.DataFrame,
     return new_row
 
 
+def write_all_data(all_data: pd.DataFrame,
+                   output_file_path: str):
+    with pd.ExcelWriter(output_file_path,
+                        engine="xlsxwriter") as writer:
+        all_data.to_excel(writer,
+                          sheet_name="All Data",
+                          index=False)
+
+
 def write_report(good_data: pd.DataFrame,
                bad_data: pd.DataFrame,
                output_file_path: str):
