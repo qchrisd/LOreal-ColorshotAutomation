@@ -15,11 +15,12 @@ Below are the steps anticipated to deliver a minimum product.
 - :white_check_mark: Compare files to a master list to find just the new data.
 - :white_check_mark: Group sets together.
     - :white_check_mark: Deal with sets that are not matched 
+    - :large_orange_diamond: Narrow filter band for sets that have multiple standards
 - :white_check_mark: Find and mark standards.
 - :white_check_mark: Calculate colorimetry.
 - :white_check_mark: Build report file.
     - :white_check_mark: Test comparison of new data to report file works.
-- :large_orange_diamond: Backup report file.
+- :white_check_mark: Backup report file.
 - :white_large_square: Final Integration testing.
 - :white_large_square: Package module into a standalone executable.
 
