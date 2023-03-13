@@ -13,7 +13,8 @@ from data_helpers import (get_filepaths,
                           filter_for_group,
                           report_comparison,
                           write_report,
-                          write_all_data)
+                          write_all_data,
+                          write_bad_comparisons)
 
 def driver():
     """Main method of the program.
@@ -24,7 +25,7 @@ def driver():
     try:
         master_data = get_data(["./all_data.xlsx"], sheet_name="All Data")
         print("Success")
-    except:
+    except:  #TODO Except only file not found
         master_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
         
@@ -33,7 +34,7 @@ def driver():
     try:
         previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report")
         print("Success")
-    except:
+    except:  #TODO Except only file not found
         previous_report_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
     
@@ -45,7 +46,7 @@ def driver():
     if master_data.columns.size == 0:
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
-    new_data = get_missing_rows(data, master_data)
+    new_data = get_missing_rows(data, master_data)  #TODO adjust missing rows algorithm to find rows that are not used in the report maybe 
     all_data = pd.concat([master_data, new_data], ignore_index=True)  # Update all_data table
     
     # Label new data for colorimetry
@@ -64,7 +65,7 @@ def driver():
         filtered_data = filter_for_group(new_data,
                                          date,
                                          nuance,
-                                         hair_type).reset_index()
+                                         hair_type).reset_index(drop=True)
         
         # print(date, nuance, hair_type, list(filtered_data["ShadeName"]), filtered_data.shape[0], sum(filtered_data["STD"]))  #! Logging should be removed before final build
 
@@ -83,7 +84,7 @@ def driver():
                 comparison = filtered_data.loc[index:index+1]
                 good_comparisons.append(report_comparison(standard, comparison))
     
-    # Handle edge cases where pd.concat() cannot merge comparisons.
+    # Handle edge cases where pd.concat() cannot merge list.
     if len(good_comparisons) == 0:
         print("No new data found.")
         exit(0)
@@ -91,6 +92,16 @@ def driver():
         good_comparisons = good_comparisons[0]
     else:            
         good_comparisons = pd.concat(good_comparisons, ignore_index=True)
+    
+    if len(bad_comparisons) == 0:
+        pass
+    elif len(bad_comparisons) == 1:
+        bad_comparisons = bad_comparisons[0]
+        print("Some data points could not be assigned a set. Check the 'Bad Comparisons' file for this data.")
+    else:
+        bad_comparisons = pd.concat(bad_comparisons, ignore_index=True)
+        print("Some data points could not be assigned a set. Check the 'Bad Comparisons' file for this data.")
+
 
     # Process previous report data
     if previous_report_data.columns.size == 0:  # File did not exist
@@ -105,6 +116,8 @@ def driver():
                    "./all_data.xlsx")
     write_report(report_data,
                "./Colorimetry Report.xlsx")
+    write_bad_comparisons(bad_comparisons,
+                          "./Bad Comparisons.xlsx")
     
 
 ## Main
