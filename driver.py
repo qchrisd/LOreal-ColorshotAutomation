@@ -12,8 +12,6 @@ from data_helpers import (get_filepaths,
                           mark_shade_names,
                           process_sets,
                           get_groups,
-                          filter_for_group,
-                          report_comparison,
                           write_report,
                           write_all_data,
                           write_bad_comparisons,
@@ -41,7 +39,7 @@ def driver():
     try:
         previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report")
         print("Success")
-    except FileNotFoundError as e:  #TODO Except only file not found
+    except FileNotFoundError as e:
         previous_report_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
     except PermissionError as e:
@@ -57,7 +55,7 @@ def driver():
     if master_data.columns.size == 0:
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
-    new_data = get_missing_rows(data, master_data)  #TODO adjust missing rows algorithm to find rows that are not used in the report
+    new_data = get_missing_rows(data, master_data)
     
     # Label new data for colorimetry
     new_data = mark_standards(new_data)
