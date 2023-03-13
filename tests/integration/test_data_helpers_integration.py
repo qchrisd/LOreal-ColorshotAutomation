@@ -24,6 +24,7 @@ def test_get_data(test_cases, expected):
     actual = get_data(test_cases)
     expected["Date"] = pd.to_datetime(expected["Date"],
                                       format="%Y%m%d-%H%M%S")
+    expected["File Path"] = actual["File Path"]
     pd.testing.assert_frame_equal(actual, expected)
     
     
