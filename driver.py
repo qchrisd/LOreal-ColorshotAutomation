@@ -15,7 +15,8 @@ from data_helpers import (get_filepaths,
                           report_comparison,
                           write_report,
                           write_all_data,
-                          write_bad_comparisons)
+                          write_bad_comparisons,
+                          backup_file)
 
 def driver():
     """Main method of the program.
@@ -129,8 +130,9 @@ def driver():
         for column_name in good_comparisons.columns:
             previous_report_data = previous_report_data.assign(**{column_name:None})
 
-    
-    #TODO Back up file
+    # Back up files
+    backup_file("all_data.xlsx")
+    backup_file("Colorimetry Report.xlsx")
 
     # Write files
     if write_all_data_flag:

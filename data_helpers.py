@@ -2,6 +2,8 @@
 """data_helpers.py: Contains helpful methods for acquiring and manipulating data files and data structures."""
 
 ## Imports
+import os
+import shutil
 import math
 from decimal import Decimal
 import pandas as pd
@@ -291,3 +293,16 @@ def write_bad_comparisons(all_data: pd.DataFrame,
         all_data.to_excel(writer,
                           sheet_name="Bad comparisons",
                           index=False)
+
+
+def backup_file(file_name: str,
+                file_directory: str = "./"):
+    try:
+        print(f"Backing up {file_name}...", end="", flush=True)
+        shutil.copyfile(f"{file_directory}{file_name}", f"./backups/[{datetime.datetime.today().strftime('%Y%m%d')}] {file_name}")
+        print("Success")
+    except FileNotFoundError as e:
+        print("backup directory does not exist. Making /backups/")
+        os.mkdir("./backups")
+        backup_file(file_name)
+        
