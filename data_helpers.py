@@ -47,6 +47,7 @@ def get_data(file_paths: list,
                                                     format="%Y%m%d-%H%M%S")
         except:
             pass
+        current_file_df["File Path"] = path
         list_of_dfs.append(current_file_df)
     
     all_data = pd.concat(list_of_dfs,

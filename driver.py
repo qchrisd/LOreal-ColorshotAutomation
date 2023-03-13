@@ -41,12 +41,14 @@ def driver():
     data_filepaths = get_filepaths("./data_filepaths.confidential")
     data = get_data(data_filepaths)
     
-    # Find and process new data
+    # Find new data
     if master_data.columns.size == 0:
         for column_name in data.columns:
             master_data = master_data.assign(**{column_name:None})
     new_data = get_missing_rows(data, master_data)
-    all_data = pd.concat([master_data, new_data], ignore_index=True)
+    all_data = pd.concat([master_data, new_data], ignore_index=True)  # Update all_data table
+    
+    # Label new data for colorimetry
     new_data = mark_standards(new_data)
     new_data = mark_shade_names(new_data)
     
