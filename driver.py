@@ -96,13 +96,13 @@ def driver():
             previous_report_data = previous_report_data.assign(**{column_name:None})
     report_data = pd.concat([previous_report_data, good_comparisons])
     
+    #TODO Back up file
+
     # Write files
     write_all_data(all_data,
                    "./all_data.xlsx")
     write_report(report_data,
                "./Colorimetry Report.xlsx")
-
-    #TODO Back up file
     
 
 ## Main

@@ -26,6 +26,7 @@ def get_filepaths(text_file):
     return lines
 
 
+#TODO Refactor so there is no default of "Plan" for the sheet name
 def get_data(file_paths: list,
              sheet_name: str = "Plan"):
     """Gets data from a list of excel spreadsheets.
