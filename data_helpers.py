@@ -138,7 +138,8 @@ def mark_shade_names(data_set: pd.DataFrame):
     return data_set
 
 
-def get_groups(data_set: pd.DataFrame):
+def get_groups(data_set: pd.DataFrame,
+               group_frequency: str = "1D"):
     """Returns all possible groups based on date, shade name, and hair type
 
     Args:
@@ -147,7 +148,7 @@ def get_groups(data_set: pd.DataFrame):
     Returns:
         pd.DataFrame: DataFrame with the same column names where one row is one group.
     """
-    groups = data_set.groupby([pd.Grouper(key="Date", freq="1D"),"Nuance","Fiber"]).size().reset_index()
+    groups = data_set.groupby([pd.Grouper(key="Date", freq=group_frequency),"Nuance","Fiber"]).size().reset_index()
     groups = groups.drop(columns=[0])
     return groups
     
