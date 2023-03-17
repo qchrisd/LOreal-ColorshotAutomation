@@ -37,7 +37,7 @@ def driver():
     # Get data held in the previous report files
     print("Getting previous report entries... ", end="", flush=True)
     try:
-        previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report")
+        previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         previous_report_data = pd.DataFrame()
