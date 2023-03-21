@@ -330,6 +330,13 @@ def process_sets(sets: pd.DataFrame,
                                             date,
                                             nuance,
                                             hair_type).reset_index(drop=True)
+            # Only keep the most recent measurement and add the duplicates to the used data points list to not be used again
+            duplicates = filtered_data.duplicated(subset=["Nuance", "Fiber", "STD", "Name", "ShadeName","Formula number"],
+                                                  keep="last")
+            duplicated_rows = filtered_data[duplicates]
+            used_rows.append(duplicated_rows)
+            filtered_data = filtered_data.drop_duplicates(subset=["Nuance", "Fiber", "STD", "Name", "ShadeName","Formula number"],
+                                                          keep="last").reset_index(drop=True)
             
             if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
                 bad_comparisons.append(filtered_data)
