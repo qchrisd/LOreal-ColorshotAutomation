@@ -1,4 +1,6 @@
+alive_progress==3.0.1
 colour==0.1.5
 numpy==1.24.2
 pandas==1.5.3
+progressbar33==2.4
 pytest==7.2.1
