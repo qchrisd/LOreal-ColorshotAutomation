@@ -243,7 +243,9 @@ def report_comparison(standard: pd.DataFrame,
         "db*":[delta_b],
         "dC":[delta_C],
         "dh":[delta_h],
-        "dH (metric difference)":[delta_H]
+        "dH (metric difference)":[delta_H],
+        "File Path Standard":[standard.iloc[0]["File Path"]],
+        "File Path Comparison":[comparison.iloc[0]["File Path"]]
     })
     return new_row
 
