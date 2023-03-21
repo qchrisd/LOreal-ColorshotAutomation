@@ -343,11 +343,10 @@ def process_sets(sets: pd.DataFrame,
             elif sum(filtered_data["STD"]) < 1:  # No standards in the set
                 bad_comparisons.append(filtered_data)
             elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
-                #TODO If there uis only onle unique STD then keep the most recent one
-                # Mark the correct filepath in the report file
+                #TODO Mark the correct filepath in the report file
                 #TODO Generate report of sets that need 'STD' nomenclature correction
                 sets_by_hour = get_groups(filtered_data, group_frequency="H")
-                print(filtered_data[["Date","Nuance","Fiber","STD","Name","ShadeName"]],"\n",sets_by_hour)
+                print(filtered_data[["Date","Nuance","Fiber","STD","Name","ShadeName"]],"\n",duplicates,"\n",sets_by_hour)
             else:
                 used_rows.append(filtered_data)
                 standard = filtered_data.loc[filtered_data["STD"] == True]
