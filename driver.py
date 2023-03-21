@@ -3,7 +3,9 @@
 """driver.py: Drives the colorshot data automation and colorimetry calculations."""
 
 ## Imports
+from os import path
 import sys
+import string
 import pandas as pd
 from data_helpers import (get_filepaths, 
                           get_data, 
@@ -21,10 +23,13 @@ def driver():
     """Main method of the program.
     """
     
+    # Get working directory
+    bundle_dir = f"{path.abspath(path.dirname(__file__))}/"
+    
     # Get data held in the master file
     print("Getting previous ColorShot entries... ", end="", flush=True)
     try:
-        master_data = get_data(["./used_data.xlsx"], sheet_name="Used Data", include_path=False)
+        master_data = get_data([f"{bundle_dir}used_data.xlsx"], sheet_name="Used Data", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         master_data = pd.DataFrame()
@@ -37,7 +42,7 @@ def driver():
     # Get data held in the previous report files
     print("Getting previous report entries... ", end="", flush=True)
     try:
-        previous_report_data = get_data(["./Colorimetry Report.xlsx"], sheet_name="Report", include_path=False)
+        previous_report_data = get_data([f"{bundle_dir}Colorimetry Report.xlsx"], sheet_name="Report", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         previous_report_data = pd.DataFrame()
@@ -48,7 +53,7 @@ def driver():
         sys.exit(1)
     
     # Get data from the files
-    data_filepaths = get_filepaths("./data_filepaths.confidential")
+    data_filepaths = get_filepaths(f"{bundle_dir}data_filepaths.confidential")
     data = get_data(data_filepaths)
     
     # Find new data
@@ -107,17 +112,18 @@ def driver():
     # Write files
     if write_used_data_flag:
         write_used_data(used_data,
-                    "./used_data.xlsx")
+                        f"{bundle_dir}used_data.xlsx")
     if write_report_flag:
         report_data = pd.concat([previous_report_data, good_comparisons])
         write_report(report_data,
-                     "./Colorimetry Report.xlsx")
+                     f"{bundle_dir}Colorimetry Report.xlsx")
     if write_bad_comparisons_flag:
         write_bad_comparisons(bad_comparisons,
-                            "./Bad Comparisons.xlsx")
+                              f"{bundle_dir}Bad Comparisons.xlsx")
     
 
 ## Main
 if __name__ == "__main__":
     driver()
-    print("\nFinished. Exiting the program.\n")
+    print("\nFinished. Press any key to exit the program.\n")
+    input()
