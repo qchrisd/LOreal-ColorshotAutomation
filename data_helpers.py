@@ -250,14 +250,14 @@ def report_comparison(standard: pd.DataFrame,
     return new_row
 
 
-def write_all_data(all_data: pd.DataFrame,
+def write_used_data(all_data: pd.DataFrame,
                    output_file_path: str):
     all_data = all_data.drop(["STD","ShadeName"],
                              axis=1)
     with pd.ExcelWriter(output_file_path,
                         engine="xlsxwriter") as writer:
         all_data.to_excel(writer,
-                          sheet_name="All Data",
+                          sheet_name="Used Data",
                           index=False)
 
 

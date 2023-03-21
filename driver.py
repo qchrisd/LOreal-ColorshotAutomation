@@ -13,7 +13,7 @@ from data_helpers import (get_filepaths,
                           process_sets,
                           get_groups,
                           write_report,
-                          write_all_data,
+                          write_used_data,
                           write_bad_comparisons,
                           backup_file)
 
@@ -24,14 +24,14 @@ def driver():
     # Get data held in the master file
     print("Getting previous ColorShot entries... ", end="", flush=True)
     try:
-        master_data = get_data(["./all_data.xlsx"], sheet_name="All Data", include_path=False)
+        master_data = get_data(["./used_data.xlsx"], sheet_name="All Data", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         master_data = pd.DataFrame()
         print("Did not find a file. Creating a new dataframe.")
     except PermissionError as e:
         print("Failed")
-        print("\nThe all_data.xlsx file cannot be accessed. You probably have it open or the permissions for the folder are wonky. Check this and try again.")
+        print("\nThe used_data.xlsx file cannot be accessed. You probably have it open or the permissions for the folder are wonky. Check this and try again.")
         sys.exit(1)
         
     # Get data held in the previous report files
@@ -66,14 +66,14 @@ def driver():
     good_rows, good_comparisons, bad_comparisons = process_sets(sets, new_data)
     
     # Handle edge cases where pd.concat() cannot merge list.
-    write_all_data_flag = True
+    write_used_data_flag = True
     if len(good_rows) == 0:
-        write_all_data_flag = False
+        write_used_data_flag = False
     elif len(good_rows) == 1:
-        all_data = good_rows[0]
+        used_data = good_rows[0]
     else:
         good_rows = pd.concat(good_rows, ignore_index=True)
-        all_data = pd.concat([master_data, good_rows], ignore_index=True)
+        used_data = pd.concat([master_data, good_rows], ignore_index=True)
     
     write_report_flag = True
     if len(good_comparisons) == 0:
@@ -101,13 +101,13 @@ def driver():
             previous_report_data = previous_report_data.assign(**{column_name:None})
 
     # Back up files
-    backup_file("all_data.xlsx")
+    backup_file("used_data.xlsx")
     backup_file("Colorimetry Report.xlsx")
 
     # Write files
-    if write_all_data_flag:
-        write_all_data(all_data,
-                    "./all_data.xlsx")
+    if write_used_data_flag:
+        write_used_data(used_data,
+                    "./used_data.xlsx")
     if write_report_flag:
         report_data = pd.concat([previous_report_data, good_comparisons])
         write_report(report_data,
