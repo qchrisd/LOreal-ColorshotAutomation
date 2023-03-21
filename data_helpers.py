@@ -316,7 +316,7 @@ def backup_file(file_name: str,
 
 def process_sets(sets: pd.DataFrame,
                  new_data: pd.DataFrame):
-    good_rows = []
+    used_rows = []
     good_comparisons = []
     bad_comparisons = []
     
@@ -342,7 +342,7 @@ def process_sets(sets: pd.DataFrame,
                 sets_by_hour = get_groups(filtered_data, group_frequency="H")
                 print(filtered_data[["Date","Nuance","Fiber","STD","Name","ShadeName"]],"\n",sets_by_hour)
             else:
-                good_rows.append(filtered_data)
+                used_rows.append(filtered_data)
                 standard = filtered_data.loc[filtered_data["STD"] == True]
                 for index in filtered_data.index:
                     if index == standard.index:  # Skips testing standards against themselves
@@ -353,4 +353,4 @@ def process_sets(sets: pd.DataFrame,
 
     print("")
     
-    return good_rows, good_comparisons, bad_comparisons
+    return used_rows, good_comparisons, bad_comparisons
