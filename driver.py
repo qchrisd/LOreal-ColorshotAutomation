@@ -24,7 +24,7 @@ def driver():
     # Get data held in the master file
     print("Getting previous ColorShot entries... ", end="", flush=True)
     try:
-        master_data = get_data(["./used_data.xlsx"], sheet_name="All Data", include_path=False)
+        master_data = get_data(["./used_data.xlsx"], sheet_name="Used Data", include_path=False)
         print("Success")
     except FileNotFoundError as e:
         master_data = pd.DataFrame()
