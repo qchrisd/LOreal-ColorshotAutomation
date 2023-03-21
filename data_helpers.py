@@ -341,14 +341,18 @@ def process_sets(sets: pd.DataFrame,
                                                           keep="last").reset_index(drop=True)
             
             if filtered_data.shape[0] <= 1:  # No comparisons can be made if there is only 1 data point in the set.
+                filtered_data["Reason"] = "One datapoint"
                 bad_comparisons.append(filtered_data)
             elif sum(filtered_data["STD"]) < 1:  # No standards in the set
+                filtered_data["Reason"] = "No Standard"
                 bad_comparisons.append(filtered_data)
             elif sum(filtered_data["STD"]) >= 2:  # Too many standards for comparisons.
                 #TODO Mark the correct filepath in the report file
                 #TODO Generate report of sets that need 'STD' nomenclature correction
-                sets_by_hour = get_groups(filtered_data, group_frequency="H")
-                print(filtered_data[["Date","Nuance","Fiber","STD","Name","ShadeName"]],"\n",duplicates,"\n",sets_by_hour)
+                filtered_data["Reason"] = "Multiple Standards"
+                bad_comparisons.append(filtered_data)
+                # sets_by_hour = get_groups(filtered_data, group_frequency="H")
+                # print(filtered_data[["Date","Nuance","Fiber","STD","Name","ShadeName"]],"\n",duplicates,"\n",sets_by_hour)
             else:
                 used_rows.append(filtered_data)
                 standard = filtered_data.loc[filtered_data["STD"] == True]
