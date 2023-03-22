@@ -10,19 +10,21 @@ Chris Quartararo | Author, Designer
 ## Project Progress
 Below are the steps anticipated to deliver a minimum product.
 
+**V1.0**
 - :white_check_mark: Find data files.
 - :white_check_mark: Read data files into one large table.
 - :white_check_mark: Compare files to a master list to find just the new data.
 - :white_check_mark: Group sets together.
     - :white_check_mark: Deal with sets that are not matched 
-    - :large_orange_diamond: Narrow filter band for sets that have multiple standards
+    - :white_check_mark: Narrow filter band for sets that have multiple standards
 - :white_check_mark: Find and mark standards.
 - :white_check_mark: Calculate colorimetry.
 - :white_check_mark: Build report file.
     - :white_check_mark: Test comparison of new data to report file works.
 - :white_check_mark: Backup report file.
-- :white_large_square: Final Integration testing.
-- :white_large_square: Package module into a standalone executable.
+- :white_check_mark: Final Integration testing.
+- :white_check_mark: Package module into a standalone executable.
+- :large_orange_diamond: User acceptance testing for V1.0
 
 Key:
 - :white_check_mark: - Completed
@@ -48,9 +50,12 @@ The data compilation attempts to compare datapoints that are already included in
 ### Data Point Comparisons
 To properly calculate the colorimetry, a set of standard and test (comparison) formulas must be identified. Workflow demands that a standard is run on the Colorshot in the same session as running the tests, thus we _should_ always have a temporally clustered set of a standard and tests. Names of these sets are marked in the `<Shade Name>` column. Standards are tagged with exactly `"STD"` somewhere in the Shade Name. A regex finds these tags to determine which rows are standards. This technique will fail (_i.e._ incorrectly mark shades as standards) if a shade is named with the characters `"STD"` in sequence, however the designers feel this is a unique enough sequence it will not be an issue.
 
-Comparisons sets are grouped and labelled using the `Date only (no time)`, `Shade Name`, and `Fiber Type`.
+Comparisons sets are grouped and labelled using the `Date only (no time)`, `Nuance`, and `Fiber Type`.
 
-Complications arise when a single shade is run through the Colorshot multiple times in one day with different test shades, producing multiple standards of the same shade in a single day. This doesn't happen often, but enough to be considered during the design process. To decrease the likelyhood of using of the wrong standard, an expanding temporal filter is employed when a set has more than one standard present. The farther away these measurements are from each other, the higher the confidence in picking the correct standard for colorimetry comparison.
+Complications arise when a single shade is run through the Colorshot multiple times in one day with different test shades, producing multiple standards of the same shade in a single day. This doesn't happen often, but enough to be considered during the design process. Two scenarios arise in this case:
+
+1. A standard for a group was run multiple times due to errors or otherwise. In this case the most recent standard will be used and the duplicates will be ignored both in the present comparison and in the future.
+2. Multiple different formulas were marked as standards for a group. This might occur if a lab standard is being compared to a market standard at the same time as test formulas. In this case, this set will be treated as an unsuccessful set. The process for those is below.
 
 Finally, data points that are not successfully assigned to a set are placed in a separate file with their indentifying information to be dealt with. Once the base data has been corrected, the program will need to be run again to add these datapoints to the final product file.
 
@@ -65,6 +70,7 @@ $\Delta a^*$ | Change on the red(+)/green(-) axis
 $\Delta b^*$ | Change on the yellow(+)/blue(-) axis
 $\Delta C^*$ | Change in the magnitude of chroma
 $\Delta h^\circ$ | Change (+ anticlockwise/-clockwise) in the hue angle from the standard $h^\circ$
+$\Delta H$ | Metric color difference (_i.e._ the chromaticity component to total color change)
 
 $\Delta E$ values are calculated with the [colour-science](https://www.colour-science.org/) package. 
 
@@ -74,7 +80,9 @@ The $\Delta a^*$ calculation follows the same difference formula but uses a corr
 
 This same ${a^*}'$ is used to calculate corrected $C'$ values for the standard and comparison that are then used to find the difference using the previous formula.
 
-Finally, $\Delta h^\circ$ uses the corrected ${a^*}'$ values to find corrected ${\Delta h^\circ}'$ values which are then used to find the smallest angle difference starting from the standard and moving towards the comparison, measured in degrees. That formula is ${\Delta h^\circ}' = -((({h^\circ}'_{comparison} - {h^\circ}'_{standard}) + 180) \bmod 360 - 180)$, where "$\bmod$" is the modulo (or remainder) operator.
+The $\Delta h^\circ$ uses the corrected ${a^*}'$ values to find corrected ${\Delta h^\circ}'$ values which are then used to find the smallest angle difference starting from the standard and moving towards the comparison, measured in degrees. That formula is ${\Delta h^\circ}' = -((({h^\circ}'_{comparison} - {h^\circ}'_{standard}) + 180) \bmod 360 - 180)$, where "$\bmod$" is the modulo (or remainder) operator.
+
+Finally, $\Delta H$ is calculated by $\Delta H = 2*\sqrt{C'_{standard}*C'_{Comparison}} * sin(radian({\Delta h^\circ}'/2))$
 
 ### Other Functionality
 Here is some other functionality that doesn't fit neatly into other sections.
