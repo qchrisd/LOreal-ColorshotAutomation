@@ -221,6 +221,7 @@ def report_comparison(standard: pd.DataFrame,
                       comparison: pd.DataFrame):
     delta_E2000, delta_L, delta_a, delta_b, delta_C, delta_h, delta_H = calculate_colorimetry(standard, comparison)
     new_row = pd.DataFrame({
+        "Date":[standard.iloc[0]["Date"].date()],
         "Name Standard":[standard.iloc[0]["Name"]],
         "Shade Standard":[standard.iloc[0]["Nuance"]],
         "FLA Standard":[standard.iloc[0]["Formula number"]],

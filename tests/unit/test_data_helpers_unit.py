@@ -237,6 +237,7 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
                                  }),
                                  # expected
                                  pd.DataFrame({
+                                     "Date":[pd.to_datetime("20220504-143057", format="%Y%m%d-%H%M%S").date()],
                                      "Name Standard":["testSTDformula"],
                                      "Shade Standard":["test.nuance"],
                                      "FLA Standard":["12345std"],
