@@ -237,7 +237,7 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
                                  }),
                                  # expected
                                  pd.DataFrame({
-                                     "Date Standard":[pd.to_datetime("20220504-143057", format="%Y%m%d-%H%M%S")],
+                                     "Date":[pd.to_datetime("20220504-143057", format="%Y%m%d-%H%M%S").date()],
                                      "Name Standard":["testSTDformula"],
                                      "Shade Standard":["test.nuance"],
                                      "FLA Standard":["12345std"],
@@ -246,7 +246,6 @@ def test_calculate_colorimetry(input_std, input_comparison, expected):
                                      "a* Standard":[8.54994297],
                                      "b* Standard":[9.243889809],
                                      " ":[None],
-                                     "Date Comparison":[pd.to_datetime("20220504-143403", format="%Y%m%d-%H%M%S")],
                                      "Name Comparison":["testformula"],
                                      "Shade Comparison":["test.nuance"],
                                      "FLA Comparison":["12345comp"],
