@@ -268,6 +268,9 @@ def write_report(good_data: pd.DataFrame,
     with pd.ExcelWriter(output_file_path,
                         engine='xlsxwriter') as writer:
 
+        # Sorts dataframe to group tests together
+        good_data = good_data.sort_values(by=["Date","FLA Comparison"])
+
         good_data.to_excel(writer,
                            sheet_name="Report",
                            index=False,
