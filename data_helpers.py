@@ -5,6 +5,7 @@
 import os
 import shutil
 import math
+import string
 import time
 import datetime
 import re
@@ -267,6 +268,9 @@ def write_report(good_data: pd.DataFrame,
     with pd.ExcelWriter(output_file_path,
                         engine='xlsxwriter') as writer:
 
+        # Sorts dataframe to group tests together
+        good_data = good_data.sort_values(by=["Date","FLA Comparison"])
+
         good_data.to_excel(writer,
                            sheet_name="Report",
                            index=False,
@@ -274,9 +278,22 @@ def write_report(good_data: pd.DataFrame,
                            startrow=1)
         workbook = writer.book
         worksheet = writer.sheets["Report"]
-        worksheet.set_column("H:H", 1, workbook.add_format({"bg_color":"#595959"}))
-        worksheet.set_column("Q:Q", 10, workbook.add_format({"bg_color":"#FCD5B4"}))
-        worksheet.set_column("R:W", 10, workbook.add_format({"bg_color":"#D5E8FF"}))
+        
+        # Get correct columns for formatting
+        alphabet_dict = dict(zip(range(0,26,1), [letter for letter in string.ascii_uppercase]))
+        spacer_column = good_data.columns.get_loc(" ")
+        spacer_column_letter = alphabet_dict[spacer_column]
+        
+        de2000_column = good_data.columns.get_loc("dE2000")
+        de2000_column_letter = alphabet_dict[de2000_column]
+        colorimetry_column_start = de2000_column+1
+        colorimetry_column_start_letter = alphabet_dict[colorimetry_column_start]
+        colorimetry_column_end = colorimetry_column_start+5
+        colorimetry_column_end_letter = alphabet_dict[colorimetry_column_end]
+        
+        worksheet.set_column(f"{spacer_column_letter}:{spacer_column_letter}", 1, workbook.add_format({"bg_color":"#595959"}))
+        worksheet.set_column(f"{de2000_column_letter}:{de2000_column_letter}", 10, workbook.add_format({"bg_color":"#FCD5B4"}))
+        worksheet.set_column(f"{colorimetry_column_start_letter}:{colorimetry_column_end_letter}", 10, workbook.add_format({"bg_color":"#D5E8FF"}))
         # worksheet.set_row(":W", 10, workbook.add_format({"bg_color":"#D5E8FF"}))
 
         # Add a header format.
